@@ -1,12 +1,18 @@
+import React, {useRef} from 'react';
 import {ScreenContainer} from '../../common/Container';
 import {Avatar, Text, Title} from 'react-native-paper';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {Alert, FlatList, StyleSheet, View} from 'react-native';
 import globalStyles from '../../common/styles/global.styles';
 import {ThemeSpacings} from '../../config/theme';
 import {formatRwandaPhone} from '../../common/helpers/phone.helpers';
 import {QuickAction} from '../../common/components/QuickAction';
 import {TransactionHistoryItem} from './components/TransactionHistoryItem';
-import {dialUSSD} from '../../common/helpers';
+import {dialUSSD, MOMO_USSD_CODES} from '../../common/helpers';
+import {
+  CustomBottomSheet,
+  CustomBottomSheetHandles,
+} from '../../common/components/CustomBottomSheet';
+import {SendMoneyForm} from './components/SendMoneyForm';
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -44,14 +50,39 @@ const transactions: ITransaction[] = [
   },
 ];
 export const HomeScreen = () => {
-  const handleSendMoney = () => {
-    // Logic for sending money
-    console.log('Send Money clicked');
-    dialUSSD('*182*1*1#');
+  const sheetRef = useRef<CustomBottomSheetHandles>(null);
+
+  const handleDailUSSD = async (data: {
+    amount?: string;
+    phoneNumber?: string;
+    ussCodeKey: keyof typeof MOMO_USSD_CODES;
+  }) => {
+    try {
+      if (data.ussCodeKey === 'SEND_MONEY' && data.amount && data.phoneNumber) {
+        const ussdCode = MOMO_USSD_CODES.SEND_MONEY.replace(
+          '{phoneNumber}',
+          data.phoneNumber,
+        ).replace('{amount}', data.amount);
+        await dialUSSD(ussdCode);
+      } else {
+        Alert.alert(
+          'Invalid USSD Code',
+          'Please provide a valid amount and phone number for sending money.',
+        );
+      }
+    } catch (error) {
+      console.error('Error dialing USSD code:', error);
+    }
   };
-  const handlePayGoodService = () => {};
-  const handleCheckBalance = () => {};
-  const handleBuyAirtime = () => {};
+
+  const handleSendMoney = async () => {
+    sheetRef.current?.open(1);
+    // handleDailUSSD(MOMO_USSD_CODES.SEND_MONEY);
+  };
+
+  const handlePayGoodService = () => dialUSSD(MOMO_USSD_CODES.PAY_GOOD_SERVICE);
+  const handleCheckBalance = () => dialUSSD(MOMO_USSD_CODES.CHECK_BALANCE);
+  const handleBuyAirtime = () => dialUSSD(MOMO_USSD_CODES.BUY_AIRTIME);
 
   const renderTransactionItem = ({item}: {item: ITransaction}) => {
     const thirdPartPhone = formatRwandaPhone(
@@ -78,15 +109,11 @@ export const HomeScreen = () => {
     );
   };
   const keyExtractor = (item: ITransaction) => item.id;
+
   return (
     <ScreenContainer>
       <View style={styles.headerContainer}>
-        <Avatar.Image
-          size={64}
-          source={{
-            uri: 'https://placehold.co/600x400/png',
-          }}
-        />
+        <Avatar.Text size={52} label="AJ" />
         <View>
           <Title>Jean Luc Abayo</Title>
           <Text variant="labelMedium">
@@ -118,6 +145,12 @@ export const HomeScreen = () => {
           keyExtractor={keyExtractor}
         />
       </View>
+      <CustomBottomSheet ref={sheetRef}>
+        <SendMoneyForm
+          onCancel={sheetRef.current?.close}
+          onConfirm={handleDailUSSD}
+        />
+      </CustomBottomSheet>
     </ScreenContainer>
   );
 };
