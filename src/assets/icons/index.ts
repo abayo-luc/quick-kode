@@ -6,6 +6,9 @@ import Wallet from './wallet.svg';
 import Cash from './cash.svg';
 import AccountBox from './account-box.svg';
 import Phone from './phone.svg';
+import Home from './home.svg';
+import Swap from './swap.svg';
+import AccountOutline from './account-outline.svg';
 
 export const icons = {
   ArrowTopRight,
@@ -16,4 +19,7 @@ export const icons = {
   Cash,
   AccountBox,
   Phone,
+  Home,
+  Swap,
+  AccountOutline,
 };
