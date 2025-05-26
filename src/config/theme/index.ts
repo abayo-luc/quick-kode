@@ -1,5 +1,5 @@
 import {MD3LightTheme, MD3DarkTheme, MD3Theme} from 'react-native-paper';
-
+export * from './theme.utils';
 export const lightTheme: MD3Theme = {
   ...MD3LightTheme,
   colors: {
@@ -21,7 +21,7 @@ export const lightTheme: MD3Theme = {
     surface: '#FFFFFF', // White card background
     onSurface: '#000000', // Black text on cards
   },
-  roundness: 8, // Rounded corners for cards and buttons
+  roundness: 4, // Rounded corners for cards and buttons
 };
 
 export const darkTheme: MD3Theme = {
@@ -46,5 +46,5 @@ export const darkTheme: MD3Theme = {
     surface: '#000000', // Black card background
     onSurface: '#FFFFFF', // White text on cards
   },
-  roundness: 8, // Rounded corners for cards and buttons
+  roundness: 4, // Rounded corners for cards and buttons
 };

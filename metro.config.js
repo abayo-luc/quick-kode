@@ -1,7 +1,9 @@
-const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
-const {
-  wrapWithReanimatedMetroConfig,
-} = require('react-native-reanimated/metro-config');
+import { getDefaultConfig, mergeConfig } from '@react-native/metro-config';
+import { wrapWithReanimatedMetroConfig } from 'react-native-reanimated/metro-config';
+import path from 'path';
+
+const defaultConfig = getDefaultConfig(__dirname);
+const { assetExts, sourceExts } = defaultConfig.resolver;
 
 /**
  * Metro configuration
@@ -9,6 +11,17 @@ const {
  *
  * @type {import('@react-native/metro-config').MetroConfig}
  */
-const config = {};
+const config = {
+  watchFolders: [path.resolve(__dirname, 'src')],
+  transformer: {
+    babelTransformerPath: require.resolve(
+      "react-native-svg-transformer"
+    )
+  },
+  resolver: {
+    assetExts: assetExts.filter((ext) => ext !== "svg"),
+    sourceExts: [...sourceExts, "svg"]
+  }
+};
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), wrapWithReanimatedMetroConfig(config));
+export default mergeConfig(getDefaultConfig(__dirname), wrapWithReanimatedMetroConfig(config));

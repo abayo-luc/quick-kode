@@ -1,0 +1,13 @@
+import ArrowTopRight from './arrow-top-right.svg';
+import ArrowBottomRight from './arrow-bottom.right.svg';
+import HandExtended from './hand-extended.svg';
+import PhoneSync from './phone-sync.svg';
+import Wallet from './wallet.svg';
+
+export const icons = {
+  ArrowTopRight,
+  ArrowBottomRight,
+  HandExtended,
+  PhoneSync,
+  Wallet,
+};
