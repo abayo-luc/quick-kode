@@ -43,8 +43,8 @@ jobs:
         # if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 33
-          arch: x86_64
+          api-level: 30
+          arch: arm64-v8a
           profile: pixel_3a
           target: default
           disable-animations: true
