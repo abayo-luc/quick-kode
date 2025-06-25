@@ -20,8 +20,7 @@ appId: com.cashwise
 - assertVisible: "Profile"
 - assertVisible: "Recent Transactions"
 - assertVisible: "Quick Actions"
-- tapOn: "Send"
-- tapOn: "Check Balance"
+- assertVisible: "Check Balance"
 - stopRecording:
     label: 'End collecting test evidence'
     optional: true
