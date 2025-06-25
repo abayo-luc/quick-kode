@@ -37,9 +37,9 @@ jobs:
           path: |
             ~/.android/avd
             ~/.android/adb
-          key: avd-Nexus_5X-default-${{ runner.os }}-x86_64
+          key: avd-Pixel_2-default-${{ runner.os }}-x86_64
           restore-keys: |
-            avd-Nexus_5X-default-${{ runner.os }}-x86_64
+            avd-Pixel_2-default-${{ runner.os }}-x86_64
 
       - name: Create AVD (if cache miss)
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -47,7 +47,7 @@ jobs:
         with:
           api-level: 30
           arch: x86_64
-          profile: Nexus 5X
+          profile: Pixel_2
           target: default
           force-avd-creation: true
           disable-animations: true
@@ -63,7 +63,7 @@ jobs:
         with:
           api-level: 30
           arch: x86_64
-          profile: Nexus 5X
+          profile: Pixel_2
           target: default
           force-avd-creation: false
           disable-animations: true
