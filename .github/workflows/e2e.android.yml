@@ -49,7 +49,7 @@ jobs:
       #   with:
       #     api-level: 30
       #     arch: x86_64
-      #     profile: Nexus 5X
+      #     profile: pixel_2
       #     target: default
       #     force-avd-creation: false
       #     disable-animations: true
@@ -65,7 +65,7 @@ jobs:
         with:
           api-level: 30
           arch: x86_64
-          profile: Nexus 5X
+          profile: pixel_2
           target: default
           force-avd-creation: false
           disable-animations: true
