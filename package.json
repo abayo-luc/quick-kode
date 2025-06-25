@@ -10,7 +10,7 @@
     "start": "react-native start",
     "test": "jest",
     "e2e:android": "./maestro/run-test.sh",
-    "android:build-release": "cd android && ./gradlew assembleRelease"
+    "android:build-release": "yarn react-native build-android --tasks assembleRelease"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "5.1.6",

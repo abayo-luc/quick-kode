@@ -48,7 +48,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-release-${{ github.run_id }}-${{ github.run_attempt }}
-          path: app/build/outputs/apk/release/app-release.apk
+          path: android/app/build/outputs/apk/release/app-release.apk
 
   tests:
     uses: ./.github/workflows/e2e.android.yml
