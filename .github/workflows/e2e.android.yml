@@ -63,7 +63,7 @@ jobs:
       - name: Create AVD
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 30
+          api-level: 35
           arch: x86_64
           profile: Nexus 5X
           target: default
