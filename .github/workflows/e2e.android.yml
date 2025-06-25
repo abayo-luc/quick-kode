@@ -37,36 +37,44 @@ jobs:
           path: |
             ~/.android/avd
             ~/.android/adb
-          key: avd-pixel_3a-default-${{ runner.os }}-x86_64
+          key: avd-Nexus_5X-default-${{ runner.os }}-x86_64
           restore-keys: |
-            avd-pixel_3a-default-${{ runner.os }}-x86_64
+            avd-Nexus_5X-default-${{ runner.os }}-x86_64
 
       - name: Create AVD (if cache miss)
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 33
+          api-level: 30
           arch: x86_64
-          profile: pixel_3a
+          profile: Nexus_5X
           target: default
           force-avd-creation: true
           disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: >-
+            -no-window -no-audio -no-boot-anim -camera-back none
+            -gpu swiftshader_indirect -memory 2048 -accel on
           script: echo "AVD created and cached"
 
       - name: Create AVD
         # if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 33
+          api-level: 30
           arch: x86_64
-          profile: pixel_3a
+          profile: Nexus_5X
           target: default
           force-avd-creation: false
           disable-animations: true
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: >-
+            -no-window -no-audio -no-boot-anim -camera-back none
+            -gpu swiftshader_indirect -memory 2048 -accel on
           script: |
             adb wait-for-device
+            adb shell 'while [[ "$(getprop sys.boot_completed)" != "1" ]]; do sleep 1; done'
+            adb shell settings put global window_animation_scale 0
+            adb shell settings put global transition_animation_scale 0
+            adb shell settings put global animator_duration_scale 0
             adb install ./apk/app-release.apk
             yarn e2e:android
 
