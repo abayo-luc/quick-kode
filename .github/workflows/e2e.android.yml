@@ -47,14 +47,15 @@ jobs:
         with:
           api-level: 30
           arch: x86_64
-          profile: Nexus_5X
+          profile: Nexus 5X
           target: default
           force-avd-creation: true
           disable-animations: true
           emulator-options: >-
             -no-window -no-audio -no-boot-anim -camera-back none
             -gpu swiftshader_indirect -memory 2048 -accel on
-          script: echo "AVD created and cached"
+          script: |
+            echo "AVD created and cached"
 
       - name: Create AVD
         # if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -62,7 +63,7 @@ jobs:
         with:
           api-level: 30
           arch: x86_64
-          profile: Nexus_5X
+          profile: Nexus 5X
           target: default
           force-avd-creation: false
           disable-animations: true
