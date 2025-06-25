@@ -3,10 +3,10 @@ appId: com.cashwise
 - launchApp:
     clearState: true
     appId: com.cashwise
-- startRecording:
-    path: './maestro/debug/maestro-test-evidence'
-    label: 'Begin collecting test evidence'
-    optional: true
+# - startRecording:
+#     path: './maestro/debug/maestro-test-evidence'
+#     label: 'Begin collecting test evidence'
+#     optional: true
 - assertVisible:
     text: "Home"
     index: 0
@@ -21,6 +21,6 @@ appId: com.cashwise
 - assertVisible: "Recent Transactions"
 - assertVisible: "Quick Actions"
 - assertVisible: "Check Balance"
-- stopRecording:
-    label: 'End collecting test evidence'
-    optional: true
+# - stopRecording:
+#     label: 'End collecting test evidence'
+#     optional: true

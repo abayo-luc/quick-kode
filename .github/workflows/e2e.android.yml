@@ -32,33 +32,33 @@ jobs:
       - name: Add Maestro CLI to PATH
         run: echo "$HOME/.maestro/bin" >> $GITHUB_PATH
 
-      # - name: AVD cache
-      #   uses: actions/cache@v4
-      #   id: avd-cache
-      #   with:
-      #     path: |
-      #       ~/.android/avd
-      #       ~/.android/adb
-      #     key: avd-Nexus_5X-default-${{ runner.os }}-x86_64
-      #     restore-keys: |
-      #       avd-Nexus_5X-default-${{ runner.os }}-x86_64
+      - name: AVD cache
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd
+            ~/.android/adb
+          key: avd-Nexus_5X-default-${{ runner.os }}-x86_64
+          restore-keys: |
+            avd-Nexus_5X-default-${{ runner.os }}-x86_64
 
-      # - name: Create AVD (if cache miss)
-      #   if: steps.avd-cache.outputs.cache-hit != 'true'
-      #   uses: reactivecircus/android-emulator-runner@v2
-      #   with:
-      #     api-level: 30
-      #     arch: x86_64
-      #     profile: Nexus 5X
-      #     target: default
-      #     force-avd-creation: false
-      #     disable-animations: true
-      #     emulator-options: >-
-      #       -no-window -no-audio -no-boot-anim -camera-back none
-      #       -gpu swiftshader_indirect -memory 2048
-      #     script: |
-      #       echo "AVD created and cached"
-      #       avdmanager list device
+      - name: Create AVD (if cache miss)
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          arch: x86_64
+          profile: Nexus 5X
+          target: default
+          force-avd-creation: false
+          disable-animations: true
+          emulator-options: >-
+            -no-window -no-audio -no-boot-anim -camera-back none
+            -gpu swiftshader_indirect -memory 2048
+          script: |
+            echo "AVD created and cached"
+            avdmanager list device
 
       - name: Create AVD
         uses: reactivecircus/android-emulator-runner@v2
