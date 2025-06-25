@@ -1,0 +1,96 @@
+09:46:16.732 [ INFO] MAESTRO.logSystemInfo: ---- System Info ----
+09:46:16.734 [ INFO] MAESTRO.logSystemInfo: Maestro Version: 1.40.3
+09:46:16.735 [ INFO] MAESTRO.logSystemInfo: CI: Undefined
+09:46:16.736 [ INFO] MAESTRO.logSystemInfo: OS Name: Linux
+09:46:16.736 [ INFO] MAESTRO.logSystemInfo: OS Version: 6.11.0-26-generic
+09:46:16.736 [ INFO] MAESTRO.logSystemInfo: Architecture: amd64
+09:46:16.736 [ INFO] MAESTRO.logSystemInfo: Java Version: 17
+09:46:16.739 [ INFO] MAESTRO.logSystemInfo: Xcode Version: null
+09:46:16.741 [ INFO] MAESTRO.logSystemInfo: Flutter Version: Undefined
+09:46:16.742 [ INFO] MAESTRO.logSystemInfo: Flutter Channel: Undefined
+09:46:16.742 [ INFO] MAESTRO.logSystemInfo: ---------------------
+09:46:17.013 [ INFO] maestro.cli.command.TestCommand.runShardSuite: [shard 1] Selected device emulator-5554 using port 7001
+09:46:17.198 [DEBUG] io.micrometer.common.util.internal.logging.InternalLoggerFactory.newDefaultFactory: Using SLF4J as the default logging framework
+09:46:18.744 [ INFO] maestro.orchestra.Orchestra.initAI: [Orchestra] Initializing AI
+09:46:18.744 [ INFO] maestro.Maestro.invoke: Getting device info
+09:46:18.977 [ INFO] maestro.Maestro.invoke: Got device info: DeviceInfo(platform=ANDROID, widthPixels=1080, heightPixels=2220, widthGrid=1080, heightGrid=2220)
+09:46:19.077 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Define variables RUNNING
+09:46:19.081 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Define variables metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(defineVariablesCommand=DefineVariablesCommand(env={MAESTRO_FILENAME=main}, label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:46:19.088 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Define variables COMPLETED
+09:46:19.090 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Apply configuration RUNNING
+09:46:19.092 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Apply configuration metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(applyConfigurationCommand=ApplyConfigurationCommand(config=MaestroConfig(appId=com.cashwise, name=null, tags=[], ext={}, onFlowStart=null, onFlowComplete=null), label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:46:19.092 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Apply configuration COMPLETED
+09:46:19.093 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Launch app "com.cashwise" with clear state RUNNING
+09:46:19.094 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Launch app "com.cashwise" with clear state metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(launchAppCommand=LaunchAppCommand(appId=com.cashwise, clearState=true, clearKeychain=null, stopApp=null, permissions=null, launchArguments=null, label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:46:19.096 [ INFO] maestro.Maestro.clearAppState: Clearing app state com.cashwise
+09:46:19.736 [ INFO] maestro.Maestro.launchApp: Launching app com.cashwise
+09:46:19.840 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Launch app "com.cashwise" with clear state COMPLETED
+09:46:19.841 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Home", Index: 0 is visible RUNNING
+09:46:19.842 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Home", Index: 0 is visible metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(assertConditionCommand=AssertConditionCommand(condition=Condition(platform=null, visible=ElementSelector(textRegex=Home, idRegex=null, size=null, below=null, above=null, leftOf=null, rightOf=null, containsChild=null, containsDescendants=null, traits=null, index=0, enabled=null, optional=false, selected=null, checked=null, focused=null, childOf=null), notVisible=null, scriptCondition=null, label=null), timeout=null, label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:46:20.022 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Home", Index: 0 is visible COMPLETED
+09:46:20.023 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Jean Luc Abayo" is visible RUNNING
+09:46:20.024 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Jean Luc Abayo" is visible metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(assertConditionCommand=AssertConditionCommand(condition=Condition(platform=null, visible=ElementSelector(textRegex=Jean Luc Abayo, idRegex=null, size=null, below=null, above=null, leftOf=null, rightOf=null, containsChild=null, containsDescendants=null, traits=null, index=null, enabled=null, optional=false, selected=null, checked=null, focused=null, childOf=null), notVisible=null, scriptCondition=null, label=null), timeout=null, label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:46:20.926 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Jean Luc Abayo" is visible COMPLETED
+09:46:20.927 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Send" is visible RUNNING
+09:46:20.927 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Send" is visible metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(assertConditionCommand=AssertConditionCommand(condition=Condition(platform=null, visible=ElementSelector(textRegex=Send, idRegex=null, size=null, below=null, above=null, leftOf=null, rightOf=null, containsChild=null, containsDescendants=null, traits=null, index=null, enabled=null, optional=false, selected=null, checked=null, focused=null, childOf=null), notVisible=null, scriptCondition=null, label=null), timeout=null, label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:46:21.524 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Send" is visible COMPLETED
+09:46:21.525 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Pay Good/Service" is visible RUNNING
+09:46:21.526 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Pay Good/Service" is visible metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(assertConditionCommand=AssertConditionCommand(condition=Condition(platform=null, visible=ElementSelector(textRegex=Pay Good/Service, idRegex=null, size=null, below=null, above=null, leftOf=null, rightOf=null, containsChild=null, containsDescendants=null, traits=null, index=null, enabled=null, optional=false, selected=null, checked=null, focused=null, childOf=null), notVisible=null, scriptCondition=null, label=null), timeout=null, label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:46:21.725 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Pay Good/Service" is visible COMPLETED
+09:46:21.726 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Home", Index: 1 is visible RUNNING
+09:46:21.726 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Home", Index: 1 is visible metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(assertConditionCommand=AssertConditionCommand(condition=Condition(platform=null, visible=ElementSelector(textRegex=Home, idRegex=null, size=null, below=null, above=null, leftOf=null, rightOf=null, containsChild=null, containsDescendants=null, traits=null, index=1, enabled=null, optional=false, selected=null, checked=null, focused=null, childOf=null), notVisible=null, scriptCondition=null, label=null), timeout=null, label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:46:21.822 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Home", Index: 1 is visible COMPLETED
+09:46:21.824 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Transactions" is visible RUNNING
+09:46:21.826 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Transactions" is visible metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(assertConditionCommand=AssertConditionCommand(condition=Condition(platform=null, visible=ElementSelector(textRegex=Transactions, idRegex=null, size=null, below=null, above=null, leftOf=null, rightOf=null, containsChild=null, containsDescendants=null, traits=null, index=null, enabled=null, optional=false, selected=null, checked=null, focused=null, childOf=null), notVisible=null, scriptCondition=null, label=null), timeout=null, label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:46:21.934 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Transactions" is visible COMPLETED
+09:46:21.936 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Profile" is visible RUNNING
+09:46:21.937 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Profile" is visible metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(assertConditionCommand=AssertConditionCommand(condition=Condition(platform=null, visible=ElementSelector(textRegex=Profile, idRegex=null, size=null, below=null, above=null, leftOf=null, rightOf=null, containsChild=null, containsDescendants=null, traits=null, index=null, enabled=null, optional=false, selected=null, checked=null, focused=null, childOf=null), notVisible=null, scriptCondition=null, label=null), timeout=null, label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:46:22.248 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Profile" is visible COMPLETED
+09:46:22.249 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Recent Transactions" is visible RUNNING
+09:46:22.250 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Recent Transactions" is visible metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(assertConditionCommand=AssertConditionCommand(condition=Condition(platform=null, visible=ElementSelector(textRegex=Recent Transactions, idRegex=null, size=null, below=null, above=null, leftOf=null, rightOf=null, containsChild=null, containsDescendants=null, traits=null, index=null, enabled=null, optional=false, selected=null, checked=null, focused=null, childOf=null), notVisible=null, scriptCondition=null, label=null), timeout=null, label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:46:22.409 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Recent Transactions" is visible COMPLETED
+09:46:22.410 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Quick Actions" is visible RUNNING
+09:46:22.411 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Quick Actions" is visible metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(assertConditionCommand=AssertConditionCommand(condition=Condition(platform=null, visible=ElementSelector(textRegex=Quick Actions, idRegex=null, size=null, below=null, above=null, leftOf=null, rightOf=null, containsChild=null, containsDescendants=null, traits=null, index=null, enabled=null, optional=false, selected=null, checked=null, focused=null, childOf=null), notVisible=null, scriptCondition=null, label=null), timeout=null, label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:46:22.517 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Quick Actions" is visible COMPLETED
+09:46:22.518 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Tap on "Send" RUNNING
+09:46:22.520 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Tap on "Send" metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(tapOnElementCommand=TapOnElementCommand(selector=ElementSelector(textRegex=Send, idRegex=null, size=null, below=null, above=null, leftOf=null, rightOf=null, containsChild=null, containsDescendants=null, traits=null, index=null, enabled=null, optional=false, selected=null, checked=null, focused=null, childOf=null), retryIfNoChange=true, waitUntilVisible=false, longPress=false, repeat=null, waitToSettleTimeoutMs=null, label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:46:22.604 [ INFO] maestro.Maestro.tap-BUbHBYE: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Send, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=button-text, clickable=false, bounds=[165,638][256,693], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=165, y=638, width=91, height=55))
+09:46:23.750 [ INFO] maestro.Maestro.tap-BUbHBYE: Refreshed element
+09:46:23.753 [ INFO] maestro.Maestro.hierarchyBasedTap-hbl3e4M: Tapping at (210, 665) using hierarchy based logic for wait
+09:46:23.753 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+09:46:23.753 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+09:46:24.466 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+09:46:24.466 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+09:46:25.090 [ INFO] maestro.Maestro.hierarchyBasedTap-hbl3e4M: Something have changed in the UI judging by screenshot (d=0.1275604). Proceed.
+09:46:25.090 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Tap on "Send" COMPLETED
+09:46:25.091 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Tap on "Check Balance" RUNNING
+09:46:25.091 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Tap on "Check Balance" metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(tapOnElementCommand=TapOnElementCommand(selector=ElementSelector(textRegex=Check Balance, idRegex=null, size=null, below=null, above=null, leftOf=null, rightOf=null, containsChild=null, containsDescendants=null, traits=null, index=null, enabled=null, optional=false, selected=null, checked=null, focused=null, childOf=null), retryIfNoChange=true, waitUntilVisible=false, longPress=false, repeat=null, waitToSettleTimeoutMs=null, label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:46:25.146 [ INFO] maestro.Maestro.tap-BUbHBYE: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Check Balance, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=button-text, clickable=false, bounds=[165,792][427,847], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=165, y=792, width=262, height=55))
+09:46:26.323 [ INFO] maestro.Maestro.tap-BUbHBYE: Refreshed element
+09:46:26.324 [ INFO] maestro.Maestro.hierarchyBasedTap-hbl3e4M: Tapping at (296, 819) using hierarchy based logic for wait
+09:46:26.324 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+09:46:26.324 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+09:46:27.438 [ INFO] maestro.Maestro.hierarchyBasedTap-hbl3e4M: Something have changed in the UI judging by view hierarchy. Proceed.
+09:46:27.438 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Tap on "Check Balance" COMPLETED
+09:46:28.024 [ INFO] maestro.drivers.AndroidDriver.close: [Start] close port forwarder
+09:46:28.025 [ERROR] maestro.cli.session.MaestroSessionManager.newSession$lambda$0: Failed to record heartbeat
+java.lang.InterruptedException: sleep interrupted
+	at java.base/java.lang.Thread.sleep(Native Method)
+	at maestro.cli.session.MaestroSessionManager.newSession$lambda$0(MaestroSessionManager.kt:90)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+09:46:33.026 [ INFO] maestro.drivers.AndroidDriver.close: [Done] close port forwarder
+09:46:33.026 [ INFO] maestro.drivers.AndroidDriver.close: [Start] Remove host port from port forwarder map
+09:46:33.027 [ INFO] maestro.drivers.AndroidDriver.close: [Done] Remove host port from port forwarder map
+09:46:33.027 [ INFO] maestro.drivers.AndroidDriver.close: [Start] Remove host port from port to allocation map
+09:46:33.027 [ INFO] maestro.drivers.AndroidDriver.close: [Done] Remove host port from port to allocation map
+09:46:33.027 [ INFO] maestro.drivers.AndroidDriver.close: [Start] Uninstall driver from device
+09:46:33.245 [ INFO] maestro.drivers.AndroidDriver.close: [Done] Uninstall driver from device
+09:46:33.246 [ INFO] maestro.drivers.AndroidDriver.close: [Start] Close instrumentation session
+09:46:33.246 [ INFO] maestro.drivers.AndroidDriver.close: [Done] Close instrumentation session
+09:46:33.246 [ INFO] maestro.drivers.AndroidDriver.close: [Start] Shutdown GRPC channel
+09:46:33.249 [ INFO] maestro.drivers.AndroidDriver.close: [Done] Shutdown GRPC channel

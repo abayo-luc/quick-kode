@@ -1,0 +1,27 @@
+appId: com.cashwise
+---
+- launchApp:
+    clearState: true
+    appId: com.cashwise
+- startRecording:
+    path: './maestro/debug/maestro-test-evidence'
+    label: 'Begin collecting test evidence'
+    optional: true
+- assertVisible:
+    text: "Home"
+    index: 0
+- assertVisible: "Jean Luc Abayo"
+- assertVisible: "Send"
+- assertVisible: "Pay Good/Service"
+- assertVisible:
+    text: "Home"
+    index: 1
+- assertVisible: "Transactions"
+- assertVisible: "Profile"
+- assertVisible: "Recent Transactions"
+- assertVisible: "Quick Actions"
+- tapOn: "Send"
+- tapOn: "Check Balance"
+- stopRecording:
+    label: 'End collecting test evidence'
+    optional: true

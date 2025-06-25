@@ -1,0 +1,59 @@
+name: Android Build
+on: 
+  push: 
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+    name: Generate APK
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/yarn
+            node_modules
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            yarn-${{ runner.os }}-
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+        
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17 
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      
+      - name: Grant permission to execute gradlew
+        run: chmod +x ./gradlew
+      
+      - name: Build Debug APK
+        run: ./gradlew assembleRelease
+      
+      - name: Upload APK 
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-${{ github.run_id }}-${{ github.run_attempt }}
+          path: app/build/outputs/apk/release/app-release.apk

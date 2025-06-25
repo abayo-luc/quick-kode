@@ -145,12 +145,12 @@ export const HomeScreen = () => {
           keyExtractor={keyExtractor}
         />
       </View>
-      <CustomBottomSheet ref={sheetRef}>
+      {/* <CustomBottomSheet ref={sheetRef}>
         <SendMoneyForm
           onCancel={sheetRef.current?.close}
           onConfirm={handleDailUSSD}
         />
-      </CustomBottomSheet>
+      </CustomBottomSheet> */}
     </ScreenContainer>
   );
 };
