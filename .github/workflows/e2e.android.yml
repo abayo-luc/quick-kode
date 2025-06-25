@@ -24,11 +24,13 @@ jobs:
           restore-keys: |
             maestro-cli-${{ runner.os }}-
 
-      - name: Install Maestro CLI and add to PATH
+      - name: Install Maestro CLI
         if: steps.cache-maestro.outputs.cache-hit != 'true'
         run: |
           curl -Ls "https://get.maestro.mobile.dev" | bash
-          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+
+      - name: Add Maestro CLI to PATH
+        run: echo "$HOME/.maestro/bin" >> $GITHUB_PATH
 
       - name: AVD cache
         uses: actions/cache@v4
@@ -37,9 +39,9 @@ jobs:
           path: |
             ~/.android/avd
             ~/.android/adb
-          key: avd-default-profile-default-${{ runner.os }}-x86_64
+          key: avd-pixel_2-default-${{ runner.os }}-x86_64
           restore-keys: |
-            avd-default-profile-default-${{ runner.os }}-x86_64
+            avd-pixel_2-default-${{ runner.os }}-x86_64
 
       - name: Create AVD (if cache miss)
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -47,7 +49,7 @@ jobs:
         with:
           api-level: 30
           arch: x86_64
-          # profile: Pixel_2
+          profile: pixel_2
           target: default
           force-avd-creation: true
           disable-animations: true
@@ -56,7 +58,7 @@ jobs:
             -gpu swiftshader_indirect -memory 2048 -accel on
           script: |
             echo "AVD created and cached"
-            avdmanager list device
+            # avdmanager list device
 
       - name: Create AVD
         # if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -64,7 +66,7 @@ jobs:
         with:
           api-level: 30
           arch: x86_64
-          # profile: Pixel_2
+          profile: pixel_2
           target: default
           force-avd-creation: false
           disable-animations: true
@@ -85,5 +87,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: maestro-debug-${{ github.run_id }}-${{ github.run_attempt }}
-          path: |
-            maestro/debug
+          path: maestro/debug
