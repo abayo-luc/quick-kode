@@ -37,9 +37,9 @@ jobs:
           path: |
             ~/.android/avd
             ~/.android/adb
-          key: avd-Pixel_2-default-${{ runner.os }}-x86_64
+          key: avd-default-profile-default-${{ runner.os }}-x86_64
           restore-keys: |
-            avd-Pixel_2-default-${{ runner.os }}-x86_64
+            avd-default-profile-default-${{ runner.os }}-x86_64
 
       - name: Create AVD (if cache miss)
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -47,7 +47,7 @@ jobs:
         with:
           api-level: 30
           arch: x86_64
-          profile: Pixel_2
+          # profile: Pixel_2
           target: default
           force-avd-creation: true
           disable-animations: true
@@ -56,6 +56,7 @@ jobs:
             -gpu swiftshader_indirect -memory 2048 -accel on
           script: |
             echo "AVD created and cached"
+            avdmanager list device
 
       - name: Create AVD
         # if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -63,7 +64,7 @@ jobs:
         with:
           api-level: 30
           arch: x86_64
-          profile: Pixel_2
+          # profile: Pixel_2
           target: default
           force-avd-creation: false
           disable-animations: true
