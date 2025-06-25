@@ -30,14 +30,29 @@ jobs:
           curl -Ls "https://get.maestro.mobile.dev" | bash
           echo "$HOME/.maestro/bin" >> $GITHUB_PATH
 
-      # - name: AVD cache
-      #   uses: actions/cache@v4
-      #   id: avd-cache
-      #   with:
-      #     path: |
-      #       ~/.android/avd
-      #       ~/.android/adb
-      #     key: avd-pixel_3a-default-${{ runner.os }}
+      - name: AVD cache
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd
+            ~/.android/adb
+          key: avd-pixel_3a-default-${{ runner.os }}-x86_64
+          restore-keys: |
+            avd-pixel_3a-default-${{ runner.os }}-x86_64
+
+      - name: Create AVD (if cache miss)
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          arch: x86_64
+          profile: pixel_3a
+          target: default
+          force-avd-creation: true
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: echo "AVD created and cached"
 
       - name: Create AVD
         # if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -47,8 +62,9 @@ jobs:
           arch: x86_64
           profile: pixel_3a
           target: default
+          force-avd-creation: false
           disable-animations: true
-          # emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
             adb wait-for-device
             adb install ./apk/app-release.apk
