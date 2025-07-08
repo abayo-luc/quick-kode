@@ -1,0 +1,85 @@
+09:41:23.829 [ INFO] MAESTRO.logSystemInfo: ---- System Info ----
+09:41:23.830 [ INFO] MAESTRO.logSystemInfo: Maestro Version: 1.40.3
+09:41:23.831 [ INFO] MAESTRO.logSystemInfo: CI: Undefined
+09:41:23.831 [ INFO] MAESTRO.logSystemInfo: OS Name: Linux
+09:41:23.831 [ INFO] MAESTRO.logSystemInfo: OS Version: 6.11.0-26-generic
+09:41:23.831 [ INFO] MAESTRO.logSystemInfo: Architecture: amd64
+09:41:23.831 [ INFO] MAESTRO.logSystemInfo: Java Version: 17
+09:41:23.836 [ INFO] MAESTRO.logSystemInfo: Xcode Version: null
+09:41:23.838 [ INFO] MAESTRO.logSystemInfo: Flutter Version: Undefined
+09:41:23.839 [ INFO] MAESTRO.logSystemInfo: Flutter Channel: Undefined
+09:41:23.839 [ INFO] MAESTRO.logSystemInfo: ---------------------
+09:41:24.179 [ INFO] maestro.cli.command.TestCommand.runShardSuite: [shard 1] Selected device RZCW11E704W using port 7001
+09:41:24.416 [DEBUG] io.micrometer.common.util.internal.logging.InternalLoggerFactory.newDefaultFactory: Using SLF4J as the default logging framework
+09:41:39.163 [ INFO] maestro.orchestra.Orchestra.initAI: [Orchestra] Initializing AI
+09:41:39.163 [ INFO] maestro.Maestro.invoke: Getting device info
+09:41:39.379 [ INFO] maestro.Maestro.invoke: Got device info: DeviceInfo(platform=ANDROID, widthPixels=1080, heightPixels=2400, widthGrid=1080, heightGrid=2400)
+09:41:39.467 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Define variables RUNNING
+09:41:39.469 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Define variables metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(defineVariablesCommand=DefineVariablesCommand(env={MAESTRO_FILENAME=main}, label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:41:39.472 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Define variables COMPLETED
+09:41:39.473 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Apply configuration RUNNING
+09:41:39.474 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Apply configuration metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(applyConfigurationCommand=ApplyConfigurationCommand(config=MaestroConfig(appId=com.cashwise, name=null, tags=[], ext={}, onFlowStart=null, onFlowComplete=null), label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:41:39.475 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Apply configuration COMPLETED
+09:41:39.476 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Launch app "com.cashwise" with clear state RUNNING
+09:41:39.477 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Launch app "com.cashwise" with clear state metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(launchAppCommand=LaunchAppCommand(appId=com.cashwise, clearState=true, clearKeychain=null, stopApp=null, permissions=null, launchArguments=null, label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:41:39.478 [ INFO] maestro.Maestro.clearAppState: Clearing app state com.cashwise
+09:41:44.454 [ INFO] maestro.Maestro.launchApp: Launching app com.cashwise
+09:41:44.642 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Launch app "com.cashwise" with clear state COMPLETED
+09:41:44.645 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Home", Index: 0 is visible RUNNING
+09:41:44.647 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Home", Index: 0 is visible metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(assertConditionCommand=AssertConditionCommand(condition=Condition(platform=null, visible=ElementSelector(textRegex=Home, idRegex=null, size=null, below=null, above=null, leftOf=null, rightOf=null, containsChild=null, containsDescendants=null, traits=null, index=0, enabled=null, optional=false, selected=null, checked=null, focused=null, childOf=null), notVisible=null, scriptCondition=null, label=null), timeout=null, label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:41:45.518 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Home", Index: 0 is visible COMPLETED
+09:41:45.519 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Jean Luc Abayo" is visible RUNNING
+09:41:45.520 [ INFO] maestro.cli.runner.MaestroCommandRunner.invoke: Assert that "Jean Luc Abayo" is visible metadata CommandMetadata(numberOfRuns=null, evaluatedCommand=MaestroCommand(assertConditionCommand=AssertConditionCommand(condition=Condition(platform=null, visible=ElementSelector(textRegex=Jean Luc Abayo, idRegex=null, size=null, below=null, above=null, leftOf=null, rightOf=null, containsChild=null, containsDescendants=null, traits=null, index=null, enabled=null, optional=false, selected=null, checked=null, focused=null, childOf=null), notVisible=null, scriptCondition=null, label=null), timeout=null, label=null, optional=false)), logMessages=[], insight=Insight(message=, level=NONE), aiReasoning=null)
+09:41:54.347 [ERROR] maestro.drivers.AndroidDriver.callViewHierarchy: Received UNAVAILABLE status with message: UNAVAILABLE: Network closed for unknown reason
+09:41:54.349 [ERROR] maestro.drivers.AndroidDriver.callViewHierarchy: Failed to get view hierarchy: Network closed for unknown reason
+io.grpc.StatusRuntimeException: UNAVAILABLE: Network closed for unknown reason
+	at io.grpc.stub.ClientCalls.toStatusRuntimeException(ClientCalls.java:275)
+	at io.grpc.stub.ClientCalls.getUnchecked(ClientCalls.java:256)
+	at io.grpc.stub.ClientCalls.blockingUnaryCall(ClientCalls.java:169)
+	at maestro_android.MaestroDriverGrpc$MaestroDriverBlockingStub.viewHierarchy(MaestroDriverGrpc.java:641)
+	at maestro.drivers.AndroidDriver.callViewHierarchy(AndroidDriver.kt:376)
+	at maestro.drivers.AndroidDriver.callViewHierarchy$default(AndroidDriver.kt:374)
+	at maestro.drivers.AndroidDriver$contentDescriptor$1.invoke(AndroidDriver.kt:336)
+	at maestro.drivers.AndroidDriver$contentDescriptor$1.invoke(AndroidDriver.kt:335)
+	at maestro.utils.Metrics.measured(Metrics.kt:48)
+	at maestro.drivers.AndroidDriver.contentDescriptor(AndroidDriver.kt:335)
+	at maestro.ViewHierarchy$Companion.from-8JJjmZI(ViewHierarchy.kt:29)
+	at maestro.Maestro.viewHierarchy-c1iYVAs(Maestro.kt:424)
+	at maestro.Maestro.viewHierarchy-c1iYVAs$default(Maestro.kt:423)
+	at maestro.Maestro$findElementWithTimeout$element$1.invoke(Maestro.kt:453)
+	at maestro.Maestro$findElementWithTimeout$element$1.invoke(Maestro.kt:452)
+	at maestro.utils.MaestroTimer.withTimeout(MaestroTimer.kt:16)
+	at maestro.Maestro.findElementWithTimeout-AE3g2Tc(Maestro.kt:452)
+	at maestro.Maestro.findElementWithTimeout-AE3g2Tc$default(Maestro.kt:446)
+	at maestro.orchestra.Orchestra.findElement(Orchestra.kt:1053)
+	at maestro.orchestra.Orchestra.evaluateCondition(Orchestra.kt:694)
+	at maestro.orchestra.Orchestra.assertConditionCommand(Orchestra.kt:370)
+	at maestro.orchestra.Orchestra.executeCommand(Orchestra.kt:301)
+	at maestro.orchestra.Orchestra.executeCommands(Orchestra.kt:212)
+	at maestro.orchestra.Orchestra.runFlow(Orchestra.kt:143)
+	at maestro.cli.runner.MaestroCommandRunner.runCommands(MaestroCommandRunner.kt:189)
+	at maestro.cli.runner.TestRunner$runSingle$result$1.invoke(TestRunner.kt:71)
+	at maestro.cli.runner.TestRunner$runSingle$result$1.invoke(TestRunner.kt:62)
+	at maestro.cli.runner.TestRunner.runCatching(TestRunner.kt:179)
+	at maestro.cli.runner.TestRunner.runSingle(TestRunner.kt:62)
+	at maestro.cli.command.TestCommand.runSingleFlow(TestCommand.kt:398)
+	at maestro.cli.command.TestCommand.access$runSingleFlow(TestCommand.kt:65)
+	at maestro.cli.command.TestCommand$runShardSuite$1.invoke(TestCommand.kt:373)
+	at maestro.cli.command.TestCommand$runShardSuite$1.invoke(TestCommand.kt:341)
+	at maestro.cli.session.MaestroSessionManager.newSession(MaestroSessionManager.kt:126)
+	at maestro.cli.session.MaestroSessionManager.newSession$default(MaestroSessionManager.kt:63)
+	at maestro.cli.command.TestCommand.runShardSuite(TestCommand.kt:341)
+	at maestro.cli.command.TestCommand.access$runShardSuite(TestCommand.kt:65)
+	at maestro.cli.command.TestCommand$handleSessions$1$results$1$1.invokeSuspend(TestCommand.kt:308)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:111)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:99)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:585)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:802)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:706)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:693)
+09:43:55.368 [ERROR] maestro.drivers.AndroidDriver.callViewHierarchy: Timeout while fetching view hierarchy
+09:43:55.369 [ERROR] maestro.orchestra.Orchestra.executeCommands: [Command execution] CommandFailed: Android driver unreachable
+09:43:55.370 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+09:43:55.373 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink

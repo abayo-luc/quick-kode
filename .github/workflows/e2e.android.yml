@@ -1,0 +1,67 @@
+on:
+    workflow_call:
+  
+  jobs:
+    e2e:
+      runs-on: ubuntu-latest
+      name: Maestro E2E Tests
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+  
+        - name: Download APK artifact
+          uses: actions/download-artifact@v4
+          with:
+            name: app-release-${{ github.run_id }}-${{ github.run_attempt }}
+            path: ./apk
+  
+        - name: Cache Maestro CLI
+          id: cache-maestro
+          uses: actions/cache@v4
+          with:
+            path: ~/.maestro
+            key: maestro-cli-${{ runner.os }}
+            restore-keys: |
+              maestro-cli-${{ runner.os }}-
+  
+        - name: Install Maestro CLI
+          if: steps.cache-maestro.outputs.cache-hit != 'true'
+          run: |
+            curl -Ls "https://get.maestro.mobile.dev" | bash
+  
+        - name: Add Maestro CLI to PATH
+          run: echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+  
+        - name: Enable KVM
+          run: |
+            echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+            sudo udevadm control --reload-rules
+            sudo udevadm trigger --name-match=kvm
+  
+        - name: Create AVD
+          uses: reactivecircus/android-emulator-runner@v2
+          with:
+            api-level: 30
+            arch: x86_64
+            profile: pixel
+            target: google_apis
+            force-avd-creation: false
+            disable-animations: true
+            emulator-options: >-
+              -no-window -no-audio -no-boot-anim -camera-back none
+              -gpu swiftshader_indirect
+            script: |
+              adb wait-for-device
+              adb shell 'while [[ "$(getprop sys.boot_completed)" != "1" ]]; do sleep 1; done'
+              adb shell settings put global window_animation_scale 0
+              adb shell settings put global transition_animation_scale 0
+              adb shell settings put global animator_duration_scale 0
+              adb install ./apk/app-release.apk
+              yarn e2e:android
+  
+        - name: Upload Maestro Debug Artifacts
+          if: always()
+          uses: actions/upload-artifact@v4
+          with:
+            name: maestro-debug-${{ github.run_id }}-${{ github.run_attempt }}
+            path: maestro/debug
