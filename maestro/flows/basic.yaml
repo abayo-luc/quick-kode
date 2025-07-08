@@ -1,6 +1,6 @@
-appId: com.cashwise
+appId: com.kode
 ---
 - clearState # clears the state of our app (navigation and authentication)
 - launchApp:
-    appId: com.cashwise
+    appId: com.kode
 - assertVisible: "Home"

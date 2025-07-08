@@ -1,28 +1,36 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  return (
-    <View style={styles.container}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <NewAppScreen templateFileName="App.tsx" />
-    </View>
-  );
-}
-
+import React from 'react';
+import { StatusBar, StyleSheet, useColorScheme } from 'react-native';
+import { PaperProvider } from 'react-native-paper';
+import { darkTheme, lightTheme, Navigation } from './src';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'green',
   },
 });
+function App(): React.JSX.Element {
+  const isDarkMode = useColorScheme() === 'dark';
+
+  const theme = isDarkMode ? darkTheme : lightTheme;
+
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor={theme.colors.background}
+        />
+
+        <PaperProvider theme={theme}>
+          <GestureHandlerRootView style={styles.container}>
+            <Navigation theme={theme} />
+          </GestureHandlerRootView>
+        </PaperProvider>
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
+}
 
 export default App;

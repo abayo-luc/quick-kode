@@ -1,8 +1,8 @@
-appId: com.cashwise
+appId: com.kode
 ---
 - launchApp:
     clearState: true
-    appId: com.cashwise
+    appId: com.kode
 # - startRecording:
 #     path: './maestro/debug/maestro-test-evidence'
 #     label: 'Begin collecting test evidence'
