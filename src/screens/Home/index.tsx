@@ -1,18 +1,19 @@
-import React, {useRef} from 'react';
-import {ScreenContainer} from '../../common/Container';
-import {Avatar, Text, Title} from 'react-native-paper';
-import {Alert, FlatList, StyleSheet, View} from 'react-native';
+import React, { useRef } from 'react';
+import { ScreenContainer } from '../../common/Container';
+import { Avatar, Text, Title } from 'react-native-paper';
+import { Alert, FlatList, StyleSheet, View } from 'react-native';
 import globalStyles from '../../common/styles/global.styles';
-import {ThemeSpacings} from '../../config/theme';
-import {formatRwandaPhone} from '../../common/helpers/phone.helpers';
-import {QuickAction} from '../../common/components/QuickAction';
-import {TransactionHistoryItem} from './components/TransactionHistoryItem';
-import {dialUSSD, MOMO_USSD_CODES} from '../../common/helpers';
+import { ThemeSpacings } from '../../config/theme';
+import { formatRwandaPhone } from '../../common/helpers/phone.helpers';
+import { QuickAction } from '../../common/components/QuickAction';
+import { TransactionHistoryItem } from './components/TransactionHistoryItem';
+import { dialUSSD, MOMO_USSD_CODES } from '../../common/helpers';
 import {
   CustomBottomSheet,
   CustomBottomSheetHandles,
 } from '../../common/components/CustomBottomSheet';
-import {SendMoneyForm} from './components/SendMoneyForm';
+import { SendMoneyForm } from './components/SendMoneyForm';
+import { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -50,8 +51,8 @@ const transactions: ITransaction[] = [
   },
 ];
 export const HomeScreen = () => {
-  const sheetRef = useRef<CustomBottomSheetHandles>(null);
-
+  const sheetRef = useRef<BottomSheetModal>(null);
+  const { dismiss } = useBottomSheetModal();
   const handleDailUSSD = async (data: {
     amount?: string;
     phoneNumber?: string;
@@ -76,7 +77,8 @@ export const HomeScreen = () => {
   };
 
   const handleSendMoney = async () => {
-    sheetRef.current?.open(1);
+    sheetRef.current?.present();
+
     // handleDailUSSD(MOMO_USSD_CODES.SEND_MONEY);
   };
 
@@ -84,7 +86,7 @@ export const HomeScreen = () => {
   const handleCheckBalance = () => dialUSSD(MOMO_USSD_CODES.CHECK_BALANCE);
   const handleBuyAirtime = () => dialUSSD(MOMO_USSD_CODES.BUY_AIRTIME);
 
-  const renderTransactionItem = ({item}: {item: ITransaction}) => {
+  const renderTransactionItem = ({ item }: { item: ITransaction }) => {
     const thirdPartPhone = formatRwandaPhone(
       item.recipientNumber || item.senderNumber,
     );
@@ -145,12 +147,9 @@ export const HomeScreen = () => {
           keyExtractor={keyExtractor}
         />
       </View>
-      {/* <CustomBottomSheet ref={sheetRef}>
-        <SendMoneyForm
-          onCancel={sheetRef.current?.close}
-          onConfirm={handleDailUSSD}
-        />
-      </CustomBottomSheet> */}
+      <CustomBottomSheet ref={sheetRef}>
+        <SendMoneyForm onCancel={dismiss} onConfirm={handleDailUSSD} />
+      </CustomBottomSheet>
     </ScreenContainer>
   );
 };
