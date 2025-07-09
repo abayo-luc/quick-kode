@@ -1,19 +1,20 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { ScreenContainer } from '../../common/Container';
 import { Avatar, Text, Title } from 'react-native-paper';
 import { Alert, FlatList, StyleSheet, View } from 'react-native';
 import globalStyles from '../../common/styles/global.styles';
 import { ThemeSpacings } from '../../config/theme';
 import { formatRwandaPhone } from '../../common/helpers/phone.helpers';
-import { QuickAction } from '../../common/components/QuickAction';
 import { TransactionHistoryItem } from './components/TransactionHistoryItem';
-import { dialUSSD, MOMO_USSD_CODES } from '../../common/helpers';
+import { dialUSSD } from '../../common/helpers';
+import { MOMO_USSD_CODES } from '../../common/helpers/ussd.momo.helper';
 import { CustomBottomSheet } from '../../common/components/CustomBottomSheet';
 import { SendMoneyForm } from './components/SendMoneyForm';
 import { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
 import { StatCard } from '../../common/components/Card/StatCard';
 import { HomeQuickActions } from './components/HomeQuickActions';
-import { useUSSDEvent } from '../../common/hooks/useUSSDEvent';
+import { useExtractUSSDData } from '../../common/hooks/useUSSDEvent';
+import { formatCurrency } from '../../common/helpers/currency.helpers';
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -60,16 +61,13 @@ const transactions: ITransaction[] = [
 export const HomeScreen = () => {
   const sheetRef = useRef<BottomSheetModal>(null);
   const { dismiss } = useBottomSheetModal();
-  const { message, loading } = useUSSDEvent();
-  const [currentCode, setCurrentCode] = React.useState<
-    keyof typeof MOMO_USSD_CODES | null
-  >(null);
+  const { data, loading, action, setAction } = useExtractUSSDData();
 
   const handleDailUSSD = async (
     key: keyof typeof MOMO_USSD_CODES,
     ussdCode: string,
   ) => {
-    setCurrentCode(key);
+    setAction(key);
     return dialUSSD(ussdCode);
   };
   const onConfirmSendMoney = async (data: {
@@ -97,8 +95,6 @@ export const HomeScreen = () => {
 
   const handleSendMoney = async () => {
     sheetRef.current?.present();
-
-    // handleDailUSSD(MOMO_USSD_CODES.SEND_MONEY);
   };
 
   const handlePayGoodService = () =>
@@ -137,19 +133,20 @@ export const HomeScreen = () => {
   return (
     <ScreenContainer>
       <View style={styles.statSection}>
-        <StatCard title="Available balance" value="RWF ---" />
-        <StatCard title="Fees" value="RWF ---" />
-        <StatCard title="Total Sent" value="RWF ---" />
+        <StatCard
+          title="Available balance"
+          value={`Rwf ${formatCurrency(data?.balance)}`}
+        />
+        <StatCard title="Fees" value="Rwf ---" />
       </View>
       <Title>Quick Actions</Title>
-
       <HomeQuickActions
         style={styles.quickActionContainer}
         handleBuyAirtime={handleBuyAirtime}
         handleCheckBalance={handleCheckBalance}
         handlePayGoodService={handlePayGoodService}
         handleSendMoney={handleSendMoney}
-        currentCode={currentCode}
+        currentCode={action}
         loading={loading}
       />
 
@@ -157,7 +154,7 @@ export const HomeScreen = () => {
         <SendMoneyForm
           onCancel={dismiss}
           onConfirm={onConfirmSendMoney}
-          loading={loading && currentCode === 'SEND_MONEY'}
+          loading={loading && action === 'SEND_MONEY'}
         />
       </CustomBottomSheet>
     </ScreenContainer>

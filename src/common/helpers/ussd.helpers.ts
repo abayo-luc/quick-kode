@@ -5,13 +5,6 @@ import {
   Platform,
 } from 'react-native';
 
-export const MOMO_USSD_CODES = {
-  SEND_MONEY: '*182*1*1*{phoneNumber}*{amount}#',
-  PAY_GOOD_SERVICE: '*182*8*1#',
-  CHECK_BALANCE: '*182*6*1#',
-  BUY_AIRTIME: '*182*1*3#',
-};
-
 export const dialUSSD = async (ussdCode: string) => {
   if (Platform.OS === 'android') {
     console.log('Dialing USSD code:', ussdCode?.trim());
