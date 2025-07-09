@@ -8,12 +8,12 @@ import { formatRwandaPhone } from '../../common/helpers/phone.helpers';
 import { QuickAction } from '../../common/components/QuickAction';
 import { TransactionHistoryItem } from './components/TransactionHistoryItem';
 import { dialUSSD, MOMO_USSD_CODES } from '../../common/helpers';
-import {
-  CustomBottomSheet,
-  CustomBottomSheetHandles,
-} from '../../common/components/CustomBottomSheet';
+import { CustomBottomSheet } from '../../common/components/CustomBottomSheet';
 import { SendMoneyForm } from './components/SendMoneyForm';
 import { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
+import { StatCard } from '../../common/components/Card/StatCard';
+import { HomeQuickActions } from './components/HomeQuickActions';
+import { useUSSDEvent } from '../../common/hooks/useUSSDEvent';
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -23,6 +23,13 @@ const styles = StyleSheet.create({
   },
   quickActionContainer: {
     ...globalStyles.row,
+    gap: ThemeSpacings.md,
+    flexWrap: 'wrap',
+  },
+  statSection: {
+    ...globalStyles.row,
+    alignItems: 'center',
+    width: '100%',
     gap: ThemeSpacings.md,
     flexWrap: 'wrap',
   },
@@ -53,7 +60,19 @@ const transactions: ITransaction[] = [
 export const HomeScreen = () => {
   const sheetRef = useRef<BottomSheetModal>(null);
   const { dismiss } = useBottomSheetModal();
-  const handleDailUSSD = async (data: {
+  const { message, loading } = useUSSDEvent();
+  const [currentCode, setCurrentCode] = React.useState<
+    keyof typeof MOMO_USSD_CODES | null
+  >(null);
+
+  const handleDailUSSD = async (
+    key: keyof typeof MOMO_USSD_CODES,
+    ussdCode: string,
+  ) => {
+    setCurrentCode(key);
+    return dialUSSD(ussdCode);
+  };
+  const onConfirmSendMoney = async (data: {
     amount?: string;
     phoneNumber?: string;
     ussCodeKey: keyof typeof MOMO_USSD_CODES;
@@ -64,7 +83,7 @@ export const HomeScreen = () => {
           '{phoneNumber}',
           data.phoneNumber,
         ).replace('{amount}', data.amount);
-        await dialUSSD(ussdCode);
+        await handleDailUSSD('SEND_MONEY', ussdCode);
       } else {
         Alert.alert(
           'Invalid USSD Code',
@@ -82,9 +101,12 @@ export const HomeScreen = () => {
     // handleDailUSSD(MOMO_USSD_CODES.SEND_MONEY);
   };
 
-  const handlePayGoodService = () => dialUSSD(MOMO_USSD_CODES.PAY_GOOD_SERVICE);
-  const handleCheckBalance = () => dialUSSD(MOMO_USSD_CODES.CHECK_BALANCE);
-  const handleBuyAirtime = () => dialUSSD(MOMO_USSD_CODES.BUY_AIRTIME);
+  const handlePayGoodService = () =>
+    handleDailUSSD('PAY_GOOD_SERVICE', MOMO_USSD_CODES.PAY_GOOD_SERVICE);
+  const handleCheckBalance = () =>
+    handleDailUSSD('CHECK_BALANCE', MOMO_USSD_CODES.CHECK_BALANCE);
+  const handleBuyAirtime = () =>
+    handleDailUSSD('BUY_AIRTIME', MOMO_USSD_CODES.BUY_AIRTIME);
 
   const renderTransactionItem = ({ item }: { item: ITransaction }) => {
     const thirdPartPhone = formatRwandaPhone(
@@ -114,41 +136,29 @@ export const HomeScreen = () => {
 
   return (
     <ScreenContainer>
-      <View style={styles.headerContainer}>
-        <Avatar.Text size={52} label="AJ" />
-        <View>
-          <Title>Jean Luc Abayo</Title>
-          <Text variant="labelMedium">
-            {formatRwandaPhone('+250789277275')}
-          </Text>
-        </View>
+      <View style={styles.statSection}>
+        <StatCard title="Available balance" value="RWF ---" />
+        <StatCard title="Fees" value="RWF ---" />
+        <StatCard title="Total Sent" value="RWF ---" />
       </View>
       <Title>Quick Actions</Title>
 
-      <View style={styles.quickActionContainer}>
-        <QuickAction icon="ArrowTopRight" onPress={handleSendMoney}>
-          Send
-        </QuickAction>
-        <QuickAction icon="HandExtended" onPress={handlePayGoodService}>
-          Pay Good/Service
-        </QuickAction>
-        <QuickAction icon="Wallet" onPress={handleCheckBalance}>
-          Check Balance
-        </QuickAction>
-        <QuickAction icon="PhoneSync" onPress={handleBuyAirtime}>
-          Buy Airtime
-        </QuickAction>
-      </View>
-      <Title>Recent Transactions</Title>
-      <View>
-        <FlatList
-          data={transactions}
-          renderItem={renderTransactionItem}
-          keyExtractor={keyExtractor}
-        />
-      </View>
+      <HomeQuickActions
+        style={styles.quickActionContainer}
+        handleBuyAirtime={handleBuyAirtime}
+        handleCheckBalance={handleCheckBalance}
+        handlePayGoodService={handlePayGoodService}
+        handleSendMoney={handleSendMoney}
+        currentCode={currentCode}
+        loading={loading}
+      />
+
       <CustomBottomSheet ref={sheetRef}>
-        <SendMoneyForm onCancel={dismiss} onConfirm={handleDailUSSD} />
+        <SendMoneyForm
+          onCancel={dismiss}
+          onConfirm={onConfirmSendMoney}
+          loading={loading && currentCode === 'SEND_MONEY'}
+        />
       </CustomBottomSheet>
     </ScreenContainer>
   );

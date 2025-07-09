@@ -30,3 +30,16 @@ export const dialUSSD = async (ussdCode: string) => {
     Linking.openURL(`tel:${ussdCode.trim()}`);
   }
 };
+
+export const checkAccessibilityPermission = async () => {
+  if (Platform.OS === 'android') {
+    const isEnabled =
+      await NativeModules.UssdModule.isAccessibilityServiceEnabled();
+    console.log('Accessibility service enabled:', isEnabled);
+    if (!isEnabled) {
+      console.log('Accessibility service not enabled');
+      // Optionally open settings
+      NativeModules.UssdModule.openAccessibilitySettings();
+    }
+  }
+};
