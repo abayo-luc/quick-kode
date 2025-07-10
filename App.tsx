@@ -30,6 +30,7 @@ function App(): React.JSX.Element {
           <StatusBar
             barStyle={isDarkMode ? 'light-content' : 'dark-content'}
             backgroundColor={theme.colors.background}
+            translucent
           />
 
           <PaperProvider theme={theme}>
