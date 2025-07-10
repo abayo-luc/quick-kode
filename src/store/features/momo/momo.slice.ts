@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../..';
 
 const initialState = {
   data: {
@@ -12,11 +13,16 @@ const momoSlice = createSlice({
   name: 'momo',
   initialState,
   reducers: {
-    setBalance(state, action) {
+    setMoMoBalance(state, action) {
       state.data.balance = action.payload;
     },
   },
 });
 
-export const { setBalance } = momoSlice.actions;
-export default momoSlice.reducer;
+const { actions, reducer } = momoSlice;
+
+export const { setMoMoBalance } = actions;
+
+export default reducer;
+
+export const selectMoMoBalance = (state: RootState) => state.momo.data.balance;

@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useRef } from 'react';
 import { ScreenContainer } from '../../common/Container';
-import { Avatar, Text, Title } from 'react-native-paper';
-import { Alert, FlatList, StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-paper';
+import { Alert, StyleSheet, View } from 'react-native';
 import globalStyles from '../../common/styles/global.styles';
 import { ThemeSpacings } from '../../config/theme';
 import { formatRwandaPhone } from '../../common/helpers/phone.helpers';
@@ -13,8 +13,10 @@ import { SendMoneyForm } from './components/SendMoneyForm';
 import { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
 import { StatCard } from '../../common/components/Card/StatCard';
 import { HomeQuickActions } from './components/HomeQuickActions';
-import { useExtractUSSDData } from '../../common/hooks/useUSSDEvent';
+import { useUSSDEvent } from '../../common/hooks/useUSSDEvent';
 import { formatCurrency } from '../../common/helpers/currency.helpers';
+import { useSelector } from 'react-redux';
+import { selectMoMoBalance } from '../../store/features/momo/momo.slice';
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -61,8 +63,8 @@ const transactions: ITransaction[] = [
 export const HomeScreen = () => {
   const sheetRef = useRef<BottomSheetModal>(null);
   const { dismiss } = useBottomSheetModal();
-  const { data, loading, action, setAction } = useExtractUSSDData();
-
+  const { loading, action, setAction } = useUSSDEvent();
+  const momoBalance = useSelector(selectMoMoBalance);
   const handleDailUSSD = async (
     key: keyof typeof MOMO_USSD_CODES,
     ussdCode: string,
@@ -134,12 +136,12 @@ export const HomeScreen = () => {
     <ScreenContainer>
       <View style={styles.statSection}>
         <StatCard
-          title="Available balance"
-          value={`Rwf ${formatCurrency(data?.balance)}`}
+          title="MOMO balance"
+          value={`Rwf ${formatCurrency(momoBalance)}`}
         />
         <StatCard title="Fees" value="Rwf ---" />
       </View>
-      <Title>Quick Actions</Title>
+      <Text variant="titleMedium">Quick Actions</Text>
       <HomeQuickActions
         style={styles.quickActionContainer}
         handleBuyAirtime={handleBuyAirtime}

@@ -7,7 +7,8 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { checkAccessibilityPermission } from './src/common/helpers';
 import { Provider as ReduxProvider } from 'react-redux';
-import { store } from './src/store';
+import { store, persistor } from './src/store';
+import { PersistGate } from 'redux-persist/integration/react';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -23,8 +24,9 @@ function App(): React.JSX.Element {
 
   return (
     <ReduxProvider store={store}>
-      <SafeAreaProvider>
-        <SafeAreaView style={styles.container}>
+      <PersistGate loading={null} persistor={persistor}>
+        <SafeAreaProvider>
+          {/* <SafeAreaView style={styles.container}> */}
           <StatusBar
             barStyle={isDarkMode ? 'light-content' : 'dark-content'}
             backgroundColor={theme.colors.background}
@@ -42,8 +44,9 @@ function App(): React.JSX.Element {
               </BottomSheetModalProvider>
             </GestureHandlerRootView>
           </PaperProvider>
-        </SafeAreaView>
-      </SafeAreaProvider>
+          {/* </SafeAreaView> */}
+        </SafeAreaProvider>
+      </PersistGate>
     </ReduxProvider>
   );
 }

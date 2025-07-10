@@ -4,7 +4,7 @@ export const lightTheme: MD3Theme = {
   ...MD3LightTheme,
   colors: {
     ...MD3LightTheme.colors,
-    primary: 'rgb(20,100,223)', // Green for primary actions (buttons, highlights)
+    primary: 'rgb(0, 161, 222)', // Blue for primary actions (buttons, highlights)
     primaryContainer: 'rgb(239,247,242)',
     onPrimary: '#FFFFFF', // White text/icons on primary background
     secondary: '#B7D4F0', // Blue for Balance highlights
@@ -28,7 +28,7 @@ export const darkTheme: MD3Theme = {
   ...MD3DarkTheme,
   colors: {
     ...MD3DarkTheme.colors,
-    primary: 'rgb(20,100,223)', // Same green for primary actions
+    primary: 'rgb(0, 161, 222)', // Same Blue for primary actions
     primaryContainer: 'rgb(239,247,242)',
     onPrimary: '#FFFFFF', // White text/icons on primary background
     secondary: '#B7D4F0', // Blue for Balance highlights

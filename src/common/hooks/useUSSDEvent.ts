@@ -4,11 +4,14 @@ import {
   extractMomoUSSDData,
   MOMO_USSD_CODES,
 } from '../helpers/ussd.momo.helper';
+import { useDispatch } from 'react-redux';
+import { setMoMoBalance } from '../../store/features/momo/momo.slice';
 
 const { UssdModule } = NativeModules;
 const emitter = new NativeEventEmitter(UssdModule);
 
 export const useUSSDEvent = () => {
+  const dispatch = useDispatch();
   const [message, setMessage] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [failed, setFailed] = useState<boolean>(false);
@@ -25,6 +28,12 @@ export const useUSSDEvent = () => {
     } else if (event?.message) {
       setIsLoading(false);
       setMessage(event.message);
+      setFailed(false);
+      const extractedData = extractMomoUSSDData(
+        event.message,
+        currentActionName,
+      );
+      dispatch(setMoMoBalance(extractedData.balance));
     }
   };
 
@@ -37,7 +46,7 @@ export const useUSSDEvent = () => {
     return () => {
       ussdEventListener.remove();
     };
-  }, []);
+  }, [currentActionName]);
 
   return {
     message,
@@ -45,27 +54,5 @@ export const useUSSDEvent = () => {
     failed,
     action: currentActionName,
     setAction: setCurrentActionName,
-  };
-};
-
-export const useExtractUSSDData = () => {
-  const [data, setData] = useState<IMomoExtractedData>({
-    balance: null,
-    send: null,
-    fees: null,
-  });
-  const { message, action, ...restOfUSSDEvent } = useUSSDEvent();
-
-  useEffect(() => {
-    if (message) {
-      const extractedData = extractMomoUSSDData(message, action);
-      setData(state => ({ ...state, ...extractedData }));
-    }
-  }, [message]);
-
-  return {
-    ...restOfUSSDEvent,
-    action,
-    data,
   };
 };

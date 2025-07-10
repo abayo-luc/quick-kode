@@ -1,18 +1,26 @@
 import * as React from 'react';
-import { HomeScreen, ProfileScreen, TransactionsScreen } from '../screens';
+import { HomeScreen, ProfileScreen, HistoryScreen } from '../screens';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from '../common/components';
+import { ThemeSpacings } from '../config/theme';
 
 const Tab = createBottomTabNavigator();
 
 export const HomeStack = () => {
   return (
-    <Tab.Navigator screenOptions={{ headerTitle: 'Quick Kode' }}>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: {
+          marginVertical: ThemeSpacings.sm,
+        },
+      }}
+    >
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
           tabBarLabel: 'Home',
+          headerTitle: 'Quick Kode',
           tabBarIcon: ({ color, size }) => (
             <Icon name="Home" color={color} size={size} />
           ),
@@ -20,10 +28,11 @@ export const HomeStack = () => {
       />
 
       <Tab.Screen
-        name="Transactions"
-        component={TransactionsScreen}
+        name="History"
+        component={HistoryScreen}
         options={{
-          tabBarLabel: 'Transactions',
+          tabBarLabel: 'History',
+          headerTitle: 'USSD History',
           tabBarIcon: ({ color, size }) => (
             <Icon name="Swap" color={color} size={size} />
           ),
@@ -34,6 +43,7 @@ export const HomeStack = () => {
         component={ProfileScreen}
         options={{
           tabBarLabel: 'Profile',
+          headerTitle: 'My Profile',
           tabBarIcon: ({ color, size }) => (
             <Icon name="AccountOutline" color={color} size={size} />
           ),
