@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: ThemeSpacings.md,
-    paddingTop: 0,
     ...globalStyles.column,
     gap: ThemeSpacings.md,
   },

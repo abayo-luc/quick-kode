@@ -1,7 +1,7 @@
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { QuickAction } from '../../../common/components';
 import { FC } from 'react';
-import { MOMO_USSD_CODES } from '../../../common/helpers';
+import { MOMO_USSD_CODES } from '../../../common/helpers/ussd.momo.helper';
 
 interface HomeQuickActionsProps {
   style: StyleProp<ViewStyle>;

@@ -6,7 +6,7 @@ import globalStyles from '../../common/styles/global.styles';
 import { ThemeSpacings } from '../../config/theme';
 import { formatRwandaPhone } from '../../common/helpers/phone.helpers';
 import { TransactionHistoryItem } from './components/TransactionHistoryItem';
-import { dialUSSD } from '../../common/helpers';
+import { dialUSSD } from '../../common/helpers/ussd.helpers';
 import { MOMO_USSD_CODES } from '../../common/helpers/ussd.momo.helper';
 import { CustomBottomSheet } from '../../common/components/CustomBottomSheet';
 import { SendMoneyForm } from './components/SendMoneyForm';

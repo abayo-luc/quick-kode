@@ -13,9 +13,10 @@ import { Icon } from '../../../common/components';
 import React, { useEffect } from 'react';
 import { ThemeSpacings } from '../../../config/theme';
 import { selectContactPhone } from 'react-native-select-contact';
-import { MOMO_USSD_CODES, removeCountryCode } from '../../../common/helpers';
+import { removeCountryCode } from '../../../common/helpers';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { MOMO_USSD_CODES } from '../../../common/helpers/ussd.momo.helper';
 
 const validationSchema = Yup.object().shape({
   phoneNumber: Yup.string().required('Required'),
