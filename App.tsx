@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { StatusBar, StyleSheet, useColorScheme } from 'react-native';
-import { PaperProvider } from 'react-native-paper';
+import { ActivityIndicator, PaperProvider } from 'react-native-paper';
 import { darkTheme, lightTheme, Navigation } from './src';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -24,7 +24,7 @@ function App(): React.JSX.Element {
 
   return (
     <ReduxProvider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
+      <PersistGate loading={<ActivityIndicator />} persistor={persistor}>
         <SafeAreaProvider>
           {/* <SafeAreaView style={styles.container}> */}
           <StatusBar
