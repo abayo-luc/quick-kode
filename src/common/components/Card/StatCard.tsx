@@ -1,12 +1,14 @@
 import React from 'react';
-import { Text } from 'react-native-paper';
+import { Card, CardProps, Text } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 import { DEVICE_DIMENSIONS } from '../constants';
 import { BasicCard } from './BasicCard';
+import globalStyles from '../../styles/global.styles';
 
 interface StatCardProps {
   title: string;
   value: string | number;
+  style?: CardProps['style'];
 }
 
 const styles = StyleSheet.create({
@@ -15,11 +17,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export const StatCard: React.FC<StatCardProps> = ({ title, value }) => {
+export const StatCard: React.FC<StatCardProps> = ({ title, value, style }) => {
   return (
-    <BasicCard style={styles.container} roundness={4}>
-      <Text variant="labelSmall">{title}</Text>
-      <Text variant="headlineSmall">{value}</Text>
+    <BasicCard style={[styles.container, style]} roundness={4}>
+      <Card.Content style={[globalStyles.removePadding]}>
+        <Text variant="labelSmall">{title}</Text>
+        <Text variant="headlineSmall">{value}</Text>
+      </Card.Content>
     </BasicCard>
   );
 };

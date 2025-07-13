@@ -1,4 +1,4 @@
-import { List, useTheme } from 'react-native-paper';
+import { List, Text, useTheme } from 'react-native-paper';
 import { Icon, IconProps } from '../../../common/components/Icon';
 import React from 'react';
 import { Style } from 'react-native-paper/lib/typescript/components/List/utils';
@@ -43,10 +43,11 @@ export const TransactionHistoryItem: React.FC<TransactionHistoryItemProps> = ({
   };
   return (
     <List.Item
-      title={title}
-      description={description}
+      title={<Text variant="titleSmall">{title}</Text>}
+      description={<Text variant="bodySmall">{description}</Text>}
       left={renderIcon}
       containerStyle={styles.listItem}
+      style={globalStyles.removePadding}
     />
   );
 };

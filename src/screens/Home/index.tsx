@@ -39,9 +39,12 @@ const styles = StyleSheet.create({
   statSection: {
     ...globalStyles.row,
     alignItems: 'center',
+    justifyContent: 'space-between',
     width: '100%',
-    gap: ThemeSpacings.md,
     flexWrap: 'wrap',
+  },
+  flatListContent: {
+    gap: ThemeSpacings.sm,
   },
 });
 
@@ -124,8 +127,15 @@ export const HomeScreen = () => {
   return (
     <ScreenContainer>
       <View style={styles.statSection}>
-        <StatCard title="MOMO balance" value={formatCurrency(momoBalance)} />
-        <StatCard title="Fees" value={formatCurrency(transactionFee)} />
+        <StatCard
+          title="Available Balance"
+          value={formatCurrency(momoBalance)}
+        />
+        <StatCard
+          title="Fees"
+          value={formatCurrency(transactionFee)}
+          style={{ width: '48%' }}
+        />
       </View>
       <Text variant="titleMedium">Quick Actions</Text>
       <HomeQuickActions
@@ -150,6 +160,7 @@ export const HomeScreen = () => {
         data={historyData}
         keyExtractor={item => item.id}
         renderItem={renderTransactionItem}
+        contentContainerStyle={styles.flatListContent}
       />
     </ScreenContainer>
   );

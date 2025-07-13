@@ -31,12 +31,12 @@ export const BasicCard: React.FC<BasicCardProps> = ({
       contentStyle={[
         styles.content,
         {
-          backgroundColor: theme.colors.surface,
+          backgroundColor: 'rgba(0, 0, 0, 0)',
           borderRadius: roundness || theme.roundness,
         },
         contentStyle,
       ]}
-      mode="elevated"
+      mode="outlined"
     >
       {children}
     </Card>

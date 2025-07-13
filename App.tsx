@@ -9,6 +9,8 @@ import { checkAccessibilityPermission } from './src/common/helpers';
 import { Provider as ReduxProvider } from 'react-redux';
 import { store, persistor } from './src/store';
 import { PersistGate } from 'redux-persist/integration/react';
+import SystemNavigationBar from 'react-native-system-navigation-bar';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -21,6 +23,11 @@ function App(): React.JSX.Element {
   useEffect(() => {
     checkAccessibilityPermission();
   }, []);
+
+  SystemNavigationBar.setNavigationColor(
+    theme.colors.background,
+    isDarkMode ? 'dark' : 'light',
+  );
 
   return (
     <ReduxProvider store={store}>
