@@ -17,19 +17,22 @@ export const USS_HISTORY_ACTION_TITLE: Partial<
 };
 
 export const extractMomoUSSDData = (
-  text: string,
+  currentMessage: string,
+  previousMessage: string | null,
   action: IHistoryData['action'] | null,
 ) => {
+  console.log({ currentMessage, previousMessage });
+  //let text = currentMessage.trim();
   const extractedData: IMomoExtractedData = {
     balance: null,
   };
   if (
     action === 'CHECK_BALANCE' &&
-    (text.startsWith('Musigaranye aya mafaranga') ||
-      text.startsWith('Your balance is'))
+    (currentMessage.startsWith('Musigaranye aya mafaranga') ||
+      currentMessage.startsWith('Your balance is'))
   ) {
     const regex = /(\d{1,3}(?:,\d{3})*(?:\.\d+)?\s?RWF)/i;
-    const match = text.match(regex);
+    const match = currentMessage.match(regex);
     extractedData.balance = match
       ? match[1].replace(/,/g, '').replace(/RWF/, '')
       : null;
@@ -39,16 +42,28 @@ export const extractMomoUSSDData = (
      * - cover for english
      * - cover for other lines (Airtel)
      */
-  } else if (action === 'SEND_MONEY' && text.startsWith('Washyizeho:')) {
+  } else if (
+    action === 'SEND_MONEY' &&
+    previousMessage?.startsWith('Washyizeho:') &&
+    currentMessage.startsWith('Wohereje')
+  ) {
     const [_, name, phoneNumber, amount, fees] =
-      text.match(/Washyizeho:\s(.+?),\s(\d+),\s(\d+)\sRwf.*?Rwf\s(\d+)/) || [];
+      previousMessage.match(
+        /Washyizeho:\s(.+?)\s(\d+),\s([\d,]+)\sRWF.*?RWF\s(\d+)\skirakurikizwa/,
+      ) || [];
+    const balance = currentMessage.match(/Usigaranye\s([\d,]+)\sRWF/);
+
+    if (balance && balance[1]) {
+      extractedData.balance = balance[1].replace(/,/g, '');
+    }
 
     const transactionData: Partial<IHistoryData['transaction']> = {
       name: name || undefined,
-      amount: amount || undefined,
-      fees: fees || null,
+      amount: amount?.replace(/,/g, '') || undefined,
+      fees: fees?.replace(/,/g, '') || null,
       phoneNumber: phoneNumber || undefined,
     };
+
     if (
       Object.values(transactionData).some(
         value => value !== undefined && value !== null,
@@ -57,7 +72,7 @@ export const extractMomoUSSDData = (
       extractedData['send'] = {
         id: generateCustomUUID(),
         action: 'SEND_MONEY',
-        text: text,
+        text: previousMessage,
         timestamp: Date.now(),
         transaction: {
           ...transactionData,
