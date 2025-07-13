@@ -1,13 +1,10 @@
 interface ITransaction {
-  id: string;
-  type: 'send' | 'receive' | 'buy-airtime';
-  amount: number;
-  recipientName?: string;
-  recipientNumber?: string;
-  senderName?: string;
-  senderNumber?: string;
-  provider?: string;
-  date?: string; // Optional date field for transaction date
-  description?: string; // Optional description field for additional details
-  status?: 'pending' | 'completed' | 'failed'; // Optional status field for transaction status
+  balance?: string | null;
+  name?: string;
+  amount?: string;
+  fees?: string | null;
+  phoneNumber?: string;
+  provider: 'MTN' | 'Airtel' | 'Unknown';
+  status: 'pending' | 'completed' | 'failed';
+  description?: string;
 }

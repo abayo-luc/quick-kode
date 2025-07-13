@@ -1,10 +1,13 @@
 import React, { useRef } from 'react';
 import { ScreenContainer } from '../../common/Container';
 import { Text } from 'react-native-paper';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, FlatList, StyleSheet, View } from 'react-native';
 import globalStyles from '../../common/styles/global.styles';
 import { ThemeSpacings } from '../../config/theme';
-import { formatRwandaPhone } from '../../common/helpers/phone.helpers';
+import {
+  getProviderFromPhone,
+  removeCountryCode,
+} from '../../common/helpers/phone.helpers';
 import { TransactionHistoryItem } from './components/TransactionHistoryItem';
 import { dialUSSD } from '../../common/helpers/ussd.helpers';
 import { MOMO_USSD_CODES } from '../../common/helpers/ussd.momo.helper';
@@ -17,6 +20,10 @@ import { useUSSDEvent } from '../../common/hooks/useUSSDEvent';
 import { formatCurrency } from '../../common/helpers/currency.helpers';
 import { useSelector } from 'react-redux';
 import { selectMoMoBalance } from '../../store/features/momo/momo.slice';
+import {
+  selectHistoryEntries,
+  selectTransactionHistoryFees,
+} from '../../store/features/history/history.slice';
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -38,33 +45,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const transactions: ITransaction[] = [
-  {
-    id: '1',
-    type: 'send',
-    amount: 5000,
-    recipientName: 'John Doe',
-    recipientNumber: '+250789277275',
-  },
-  {
-    id: '2',
-    type: 'receive',
-    amount: 25000,
-    senderName: 'David',
-    senderNumber: '+250789277276',
-  },
-  {
-    id: '3',
-    type: 'buy-airtime',
-    amount: 100,
-    provider: 'MTN Rwanda',
-  },
-];
 export const HomeScreen = () => {
   const sheetRef = useRef<BottomSheetModal>(null);
   const { dismiss } = useBottomSheetModal();
   const { loading, action, setAction } = useUSSDEvent();
+
   const momoBalance = useSelector(selectMoMoBalance);
+  const transactionFee = useSelector(selectTransactionHistoryFees);
+  const historyData = useSelector(selectHistoryEntries);
+
   const handleDailUSSD = async (
     key: keyof typeof MOMO_USSD_CODES,
     ussdCode: string,
@@ -72,6 +61,7 @@ export const HomeScreen = () => {
     setAction(key);
     return dialUSSD(ussdCode);
   };
+
   const onConfirmSendMoney = async (data: {
     amount?: string;
     phoneNumber?: string;
@@ -106,40 +96,36 @@ export const HomeScreen = () => {
   const handleBuyAirtime = () =>
     handleDailUSSD('BUY_AIRTIME', MOMO_USSD_CODES.BUY_AIRTIME);
 
-  const renderTransactionItem = ({ item }: { item: ITransaction }) => {
-    const thirdPartPhone = formatRwandaPhone(
-      item.recipientNumber || item.senderNumber,
-    );
-    const thirdPartName =
-      item.recipientName || item.senderName || thirdPartPhone;
+  const renderTransactionItem = ({ item }: { item: IHistoryData }) => {
+    const phoneNumber = removeCountryCode(item.transaction?.phoneNumber || '');
+
     let description: string = '';
-    if (item.type === 'send') {
-      description = `Sent to ${thirdPartName}`;
-    } else if (item.type === 'receive') {
-      description = `Received from ${thirdPartName}`;
-    } else if (item.type === 'buy-airtime') {
-      description = `Airtime purchase from ${item.provider || 'Unknown'}`;
+    if (item.action === 'SEND_MONEY') {
+      description = `Sent to ${item.transaction?.name}`;
+      if (phoneNumber) {
+        description += ` - ${removeCountryCode(phoneNumber)}`;
+      }
+    } else if (item.action === 'BUY_AIRTIME') {
+      description = `Airtime purchase from ${
+        getProviderFromPhone(phoneNumber) || 'Unknown'
+      }`;
     } else {
       description = '';
     }
     return (
       <TransactionHistoryItem
-        type={item.type}
-        title={`RWF ${item.amount}`}
+        type={item.action}
+        title={formatCurrency(item.transaction?.amount || 0)}
         description={description}
       />
     );
   };
-  const keyExtractor = (item: ITransaction) => item.id;
 
   return (
     <ScreenContainer>
       <View style={styles.statSection}>
-        <StatCard
-          title="MOMO balance"
-          value={`Rwf ${formatCurrency(momoBalance)}`}
-        />
-        <StatCard title="Fees" value="Rwf ---" />
+        <StatCard title="MOMO balance" value={formatCurrency(momoBalance)} />
+        <StatCard title="Fees" value={formatCurrency(transactionFee)} />
       </View>
       <Text variant="titleMedium">Quick Actions</Text>
       <HomeQuickActions
@@ -159,6 +145,12 @@ export const HomeScreen = () => {
           loading={loading && action === 'SEND_MONEY'}
         />
       </CustomBottomSheet>
+      <Text variant="titleMedium">Recent History</Text>
+      <FlatList
+        data={historyData}
+        keyExtractor={item => item.id}
+        renderItem={renderTransactionItem}
+      />
     </ScreenContainer>
   );
 };

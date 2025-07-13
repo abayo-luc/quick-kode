@@ -12,7 +12,7 @@ import {
 } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const REDUX_PERSIST_KEY = 'kode-root';
+const REDUX_PERSIST_KEY = 'root';
 
 const persistConfig = {
   key: REDUX_PERSIST_KEY,

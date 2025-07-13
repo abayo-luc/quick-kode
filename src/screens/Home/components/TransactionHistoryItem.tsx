@@ -1,11 +1,12 @@
-import {List, useTheme} from 'react-native-paper';
-import {Icon, IconProps} from '../../../common/components/Icon';
+import { List, useTheme } from 'react-native-paper';
+import { Icon, IconProps } from '../../../common/components/Icon';
 import React from 'react';
-import {Style} from 'react-native-paper/lib/typescript/components/List/utils';
-import {StyleSheet, View} from 'react-native';
+import { Style } from 'react-native-paper/lib/typescript/components/List/utils';
+import { StyleSheet, View } from 'react-native';
+import globalStyles from '../../../common/styles/global.styles';
 
 interface TransactionHistoryItemProps {
-  type: ITransaction['type'];
+  type: IHistoryData['action'];
   title: string;
   description: string;
 }
@@ -16,12 +17,13 @@ export const TransactionHistoryItem: React.FC<TransactionHistoryItemProps> = ({
   description,
 }) => {
   const theme = useTheme();
-  const iconNames: Record<ITransaction['type'], IconProps['name']> = {
-    send: 'ArrowBottomRight',
-    receive: 'ArrowTopRight',
-    'buy-airtime': 'PhoneSync',
-  };
-  const renderIcon = (props: {color: string; style: Style}) => {
+  const iconNames: Partial<Record<IHistoryData['action'], IconProps['name']>> =
+    {
+      SEND_MONEY: 'ArrowTopRight',
+      // receive: 'ArrowTopRight',
+      BUY_AIRTIME: 'PhoneSync',
+    };
+  const renderIcon = (props: { color: string; style: Style }) => {
     if (iconNames[type]) {
       return (
         <View
@@ -31,7 +33,8 @@ export const TransactionHistoryItem: React.FC<TransactionHistoryItemProps> = ({
               backgroundColor: theme.colors.outline,
               borderRadius: theme.roundness,
             },
-          ]}>
+          ]}
+        >
           <Icon name={iconNames[type]} color={props.color} size={30} />
         </View>
       );
@@ -43,7 +46,7 @@ export const TransactionHistoryItem: React.FC<TransactionHistoryItemProps> = ({
       title={title}
       description={description}
       left={renderIcon}
-      style={styles.listItem}
+      containerStyle={styles.listItem}
     />
   );
 };
@@ -51,6 +54,11 @@ export const TransactionHistoryItem: React.FC<TransactionHistoryItemProps> = ({
 const styles = StyleSheet.create({
   iconContainer: {
     padding: 8,
+    height: 50,
+    width: 50,
+    ...globalStyles.centered,
   },
-  listItem: {},
+  listItem: {
+    ...globalStyles.centered,
+  },
 });

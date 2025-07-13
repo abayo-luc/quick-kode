@@ -6,6 +6,7 @@ import {
 } from '../helpers/ussd.momo.helper';
 import { useDispatch } from 'react-redux';
 import { setMoMoBalance } from '../../store/features/momo/momo.slice';
+import { addHistoryEntry } from '../../store/features/history/history.slice';
 
 const { UssdModule } = NativeModules;
 const emitter = new NativeEventEmitter(UssdModule);
@@ -18,6 +19,27 @@ export const useUSSDEvent = () => {
   const [currentActionName, setCurrentActionName] = useState<
     keyof typeof MOMO_USSD_CODES | null
   >(null);
+
+  const handlePersistEventData = (
+    data: IMomoExtractedData,
+    eventName: keyof typeof MOMO_USSD_CODES,
+  ) => {
+    switch (eventName) {
+      case 'CHECK_BALANCE':
+        if (data.balance) {
+          dispatch(setMoMoBalance(data.balance));
+        }
+        break;
+      case 'SEND_MONEY':
+        console.log(data.send);
+        if (data.send) {
+          dispatch(addHistoryEntry(data.send));
+        }
+      default:
+        break;
+    }
+  };
+
   const handleUSSDResponse = (event: { message: string }) => {
     if (event?.message?.includes('running…')) {
       setIsLoading(true);
@@ -33,7 +55,9 @@ export const useUSSDEvent = () => {
         event.message,
         currentActionName,
       );
-      dispatch(setMoMoBalance(extractedData.balance));
+      if (currentActionName) {
+        handlePersistEventData(extractedData, currentActionName);
+      }
     }
   };
 

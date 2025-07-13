@@ -23,4 +23,8 @@ export default StyleSheet.create({
     marginRight: 0,
     marginLeft: 0,
   },
+  centered: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });

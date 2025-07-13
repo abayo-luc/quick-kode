@@ -3,11 +3,18 @@ import React, {
   useRef,
   useImperativeHandle,
   useEffect,
+  useMemo,
 } from 'react';
-import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
+import {
+  BottomSheetBackdrop,
+  BottomSheetBackdropProps,
+  BottomSheetModal,
+  BottomSheetView,
+} from '@gorhom/bottom-sheet';
 import { useTheme } from 'react-native-paper';
 import { Keyboard, StyleSheet } from 'react-native';
 import { ThemeSpacings } from '../../../config/theme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export interface CustomBottomSheetHandles {
   present: () => void;
@@ -23,9 +30,11 @@ export const CustomBottomSheet = React.forwardRef<
   CustomBottomSheetHandles,
   CustomBottomSheetProps
 >((props, ref) => {
+  const insets = useSafeAreaInsets();
   const { initialIndex = 0, children } = props;
   const [previousIndex, setPreviousIndex] = React.useState(initialIndex);
   const [index, setIndex] = React.useState(initialIndex);
+
   const theme = useTheme();
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
@@ -70,16 +79,38 @@ export const CustomBottomSheet = React.forwardRef<
     };
   }, [index]);
 
+  const renderBackdrop = useCallback(
+    (props: BottomSheetBackdropProps) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+        opacity={0.8}
+      />
+    ),
+    [],
+  );
+
+  const insetProps = useMemo(
+    () => ({
+      bottomInset: index === 0 ? insets.bottom : undefined,
+      topInset: index === 3 ? insets.top : undefined,
+    }),
+    [index, insets],
+  );
+
   return (
     <BottomSheetModal
       ref={bottomSheetRef}
       index={index}
-      snapPoints={['50%', '85%', '100%']}
+      snapPoints={['50%', '80%', '100%']}
       onChange={handleSheetChanges}
       enablePanDownToClose={true}
       handleIndicatorStyle={{ backgroundColor: theme.colors.onSurface }}
       backgroundStyle={{ backgroundColor: theme.colors.surface }}
       keyboardBehavior="interactive"
+      backdropComponent={renderBackdrop}
+      {...insetProps}
     >
       <BottomSheetView style={styles.container}>{children}</BottomSheetView>
     </BottomSheetModal>
@@ -88,7 +119,7 @@ export const CustomBottomSheet = React.forwardRef<
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: ThemeSpacings.md,
+    padding: ThemeSpacings.md,
     flex: 1,
   },
 });
