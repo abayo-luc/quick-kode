@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { HomeScreen, ProfileScreen, HistoryScreen } from '../screens';
+import { HomeScreen, SettingsScreen, HistoryScreen } from '../screens';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from '../common/components';
 import { ThemeSpacings } from '../config/theme';
@@ -34,18 +34,18 @@ export const HomeStack = () => {
           tabBarLabel: 'History',
           headerTitle: 'USSD History',
           tabBarIcon: ({ color, size }) => (
-            <Icon name="Swap" color={color} size={size} />
+            <Icon name="History" color={color} size={size} />
           ),
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="Settings"
+        component={SettingsScreen}
         options={{
-          tabBarLabel: 'Profile',
-          headerTitle: 'My Profile',
+          tabBarLabel: 'Settings',
+          headerTitle: 'Settings',
           tabBarIcon: ({ color, size }) => (
-            <Icon name="AccountOutline" color={color} size={size} />
+            <Icon name="AppSettings" color={color} size={size} />
           ),
         }}
       />

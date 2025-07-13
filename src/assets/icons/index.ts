@@ -1,25 +1,25 @@
+//https://fonts.google.com/icons
 import ArrowTopRight from './arrow-top-right.svg';
 import ArrowBottomRight from './arrow-bottom-right.svg';
-import HandExtended from './hand-extended.svg';
-import PhoneSync from './phone-sync.svg';
 import Wallet from './wallet.svg';
-import Cash from './cash.svg';
-import AccountBox from './account-box.svg';
 import Phone from './phone.svg';
 import Home from './home.svg';
-import Swap from './swap.svg';
-import AccountOutline from './account-outline.svg';
-
+import Profile from './profile.svg';
+import History from './history.svg';
+import PhonePause from './phone-paused.svg';
+import SendMoney from './send-money.svg';
+import CreditCard from './credit-card.svg';
+import AppSettings from './app-settings.svg';
 export const icons = {
   ArrowTopRight,
   ArrowBottomRight,
-  HandExtended,
-  PhoneSync,
   Wallet,
-  Cash,
-  AccountBox,
   Phone,
   Home,
-  Swap,
-  AccountOutline,
+  Profile,
+  History,
+  PhonePause,
+  SendMoney,
+  CreditCard,
+  AppSettings,
 };

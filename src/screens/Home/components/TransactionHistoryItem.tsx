@@ -21,7 +21,7 @@ export const TransactionHistoryItem: React.FC<TransactionHistoryItemProps> = ({
     {
       SEND_MONEY: 'ArrowTopRight',
       // receive: 'ArrowTopRight',
-      BUY_AIRTIME: 'PhoneSync',
+      BUY_AIRTIME: 'PhonePause',
     };
   const renderIcon = (props: { color: string; style: Style }) => {
     if (iconNames[type]) {

@@ -24,7 +24,7 @@ export const HomeQuickActions: FC<HomeQuickActionsProps> = ({
   return (
     <View style={style}>
       <QuickAction
-        icon="ArrowTopRight"
+        icon="SendMoney"
         onPress={handleSendMoney}
         loading={loading && currentCode === 'SEND_MONEY'}
         disabled={loading}
@@ -32,7 +32,7 @@ export const HomeQuickActions: FC<HomeQuickActionsProps> = ({
         Send
       </QuickAction>
       <QuickAction
-        icon="HandExtended"
+        icon="CreditCard"
         onPress={handlePayGoodService}
         loading={loading && currentCode === 'PAY_GOOD_SERVICE'}
         disabled={loading}
@@ -48,7 +48,7 @@ export const HomeQuickActions: FC<HomeQuickActionsProps> = ({
         Check Balance
       </QuickAction>
       <QuickAction
-        icon="PhoneSync"
+        icon="PhonePause"
         onPress={handleBuyAirtime}
         loading={loading && currentCode === 'BUY_AIRTIME'}
         disabled={loading}
