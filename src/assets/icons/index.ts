@@ -10,6 +10,9 @@ import PhonePause from './phone-paused.svg';
 import SendMoney from './send-money.svg';
 import CreditCard from './credit-card.svg';
 import AppSettings from './app-settings.svg';
+import Cash from './cash.svg';
+import AccountBox from './account-box.svg';
+
 export const icons = {
   ArrowTopRight,
   ArrowBottomRight,
@@ -22,4 +25,6 @@ export const icons = {
   SendMoney,
   CreditCard,
   AppSettings,
+  Cash,
+  AccountBox,
 };

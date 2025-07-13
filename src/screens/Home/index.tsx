@@ -89,7 +89,7 @@ export const HomeScreen = () => {
   };
 
   const handleSendMoney = async () => {
-    sheetRef.current?.present();
+    sheetRef.current?.present?.();
   };
 
   const handlePayGoodService = () =>
@@ -155,13 +155,17 @@ export const HomeScreen = () => {
           loading={loading && action === 'SEND_MONEY'}
         />
       </CustomBottomSheet>
-      <Text variant="titleMedium">Recent History</Text>
-      <FlatList
-        data={historyData}
-        keyExtractor={item => item.id}
-        renderItem={renderTransactionItem}
-        contentContainerStyle={styles.flatListContent}
-      />
+      {historyData.length > 0 && (
+        <>
+          <Text variant="titleMedium">Recent History</Text>
+          <FlatList
+            data={historyData}
+            keyExtractor={item => item.id}
+            renderItem={renderTransactionItem}
+            contentContainerStyle={styles.flatListContent}
+          />
+        </>
+      )}
     </ScreenContainer>
   );
 };
