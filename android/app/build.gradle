@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -79,7 +80,7 @@ android {
 
     namespace "com.quickkode"
     defaultConfig {
-        applicationId "com.quickkode"
+        applicationId project.env.get("APP_ID") ?: "com.quickkode"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -96,6 +97,7 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            resValue "string", "app_name", project.env.get("APP_NAME") ?: "KodeDev"
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -103,8 +105,10 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            resValue "string", "app_name", project.env.get("APP_NAME") ?: "Kode"
         }
     }
+    
 }
 
 dependencies {
