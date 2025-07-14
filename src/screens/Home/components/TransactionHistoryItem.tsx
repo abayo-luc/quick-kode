@@ -9,33 +9,59 @@ interface TransactionHistoryItemProps {
   type: IHistoryData['action'];
   title: string;
   description: string;
+  rightUpText?: string;
+  rightBottomText?: string;
 }
 
+type ItemExtraComponentProps = { color: string; style?: Style | undefined };
 export const TransactionHistoryItem: React.FC<TransactionHistoryItemProps> = ({
   type,
   title,
   description,
+  rightUpText,
+  rightBottomText,
 }) => {
   const theme = useTheme();
   const iconNames: Partial<Record<IHistoryData['action'], IconProps['name']>> =
     {
       SEND_MONEY: 'ArrowTopRight',
-      // receive: 'ArrowTopRight',
+      PAY_GOOD_SERVICE: 'CreditScore',
       BUY_AIRTIME: 'PhonePause',
     };
-  const renderIcon = (props: { color: string; style: Style }) => {
+  const renderIcon = (props: ItemExtraComponentProps) => {
     if (iconNames[type]) {
       return (
         <View
           style={[
             styles.iconContainer,
+
             {
               backgroundColor: theme.colors.outline,
               borderRadius: theme.roundness,
             },
           ]}
         >
-          <Icon name={iconNames[type]} color={props.color} size={30} />
+          <Icon name={iconNames[type]} color={props.color} size={34} />
+        </View>
+      );
+    }
+    return null;
+  };
+
+  const renderRightContent = (props: ItemExtraComponentProps) => {
+    if (rightUpText || rightBottomText) {
+      return (
+        <View style={[props.style, styles.rightContentContainer]}>
+          {rightUpText && (
+            <Text variant="bodySmall" style={{ color: props.color }}>
+              {rightUpText}
+            </Text>
+          )}
+          {rightBottomText && (
+            <Text variant="bodySmall" style={{ color: props.color }}>
+              {rightBottomText}
+            </Text>
+          )}
         </View>
       );
     }
@@ -44,9 +70,14 @@ export const TransactionHistoryItem: React.FC<TransactionHistoryItemProps> = ({
   return (
     <List.Item
       title={<Text variant="titleSmall">{title}</Text>}
-      description={<Text variant="bodySmall">{description}</Text>}
+      description={props => (
+        <Text variant="bodySmall" style={{ color: props.color }}>
+          {description}
+        </Text>
+      )}
       left={renderIcon}
-      containerStyle={styles.listItem}
+      right={renderRightContent}
+      containerStyle={styles.containerStyle}
       style={globalStyles.removePadding}
     />
   );
@@ -54,12 +85,15 @@ export const TransactionHistoryItem: React.FC<TransactionHistoryItemProps> = ({
 
 const styles = StyleSheet.create({
   iconContainer: {
-    padding: 8,
-    height: 50,
-    width: 50,
+    padding: 4,
     ...globalStyles.centered,
   },
-  listItem: {
+  containerStyle: {
     ...globalStyles.centered,
+  },
+  rightContentContainer: {
+    //alignSelf: 'stretch',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
   },
 });

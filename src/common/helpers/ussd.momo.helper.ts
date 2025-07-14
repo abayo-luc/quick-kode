@@ -1,9 +1,9 @@
-import { getProviderFromPhone, removeCountryCode } from './phone.helpers';
+import { getProviderFromPhone } from './phone.helpers';
 import { generateCustomUUID } from './utils';
 
 export const MOMO_USSD_CODES: Record<IHistoryData['action'], string> = {
   SEND_MONEY: '*182*1*1*{phoneNumber}*{amount}#',
-  PAY_GOOD_SERVICE: '*182*8*1#',
+  PAY_GOOD_SERVICE: '*182*8*1*{paymentCode}*{amount}#',
   CHECK_BALANCE: '*182*6*1#',
   BUY_AIRTIME: '*182*1*3#',
 };
@@ -78,6 +78,39 @@ export const extractMomoUSSDData = (
           ...transactionData,
           provider: getProviderFromPhone(phoneNumber),
           status: 'completed',
+        },
+      };
+    }
+  } else if (
+    action === 'PAY_GOOD_SERVICE' &&
+    previousMessage?.startsWith('Ugiye kwishyura') &&
+    (currentMessage.startsWith("Y'ello. Wishyuye") ||
+      currentMessage.startsWith("Y'ello. Wishyuye") ||
+      currentMessage.startsWith('Wishyuye'))
+  ) {
+    const [_, amount, names, paymentCode, fees, transactionId, balance] =
+      currentMessage.match(
+        /Wishyuye\s([\d,]+)\sRWF\s+kuri\s(.+?),\s(\w+)\. Ikiguzi\s([\d,]+)\sRWF\. Transaction ID\s(\w+)\. .*?usigaranye (?:no|ho)\s([\d,]+)\sRWF/i,
+      ) || [];
+
+    if (balance) {
+      extractedData.balance = balance.replace(/,/g, '');
+    }
+
+    if (paymentCode && amount) {
+      extractedData['payGoods'] = {
+        id: generateCustomUUID(),
+        action: 'PAY_GOOD_SERVICE',
+        text: currentMessage,
+        timestamp: Date.now(),
+        transaction: {
+          paymentCode,
+          amount: amount.replace(/,/g, ''),
+          status: 'completed',
+          provider: 'MTN',
+          transactionId,
+          name: names,
+          fees: fees?.replace(/,/g, ''),
         },
       };
     }

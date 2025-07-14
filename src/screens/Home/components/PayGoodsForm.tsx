@@ -1,25 +1,20 @@
 import {
-  Alert,
   Keyboard,
   KeyboardAvoidingView,
-  PermissionsAndroid,
-  Platform,
   StyleSheet,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { Button, Text, TextInput, useTheme } from 'react-native-paper';
 import { Icon } from '../../../common/components';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ThemeSpacings } from '../../../config/theme';
-import { selectContactPhone } from 'react-native-select-contact';
-import { removeCountryCode } from '../../../common/helpers';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { MOMO_USSD_CODES } from '../../../common/helpers/ussd.momo.helper';
 
 const validationSchema = Yup.object().shape({
-  phoneNumber: Yup.string().required('Required'),
+  paymentCode: Yup.string().required('Required'),
   amount: Yup.number().min(1, 'Too small').required('Required'),
 });
 const styles = StyleSheet.create({
@@ -31,7 +26,7 @@ const styles = StyleSheet.create({
   },
 });
 
-interface SendMoneyFormProps {
+interface PayGoodsFormProps {
   onCancel?: () => void;
   loading?: boolean;
   onConfirm?: (data: {
@@ -40,7 +35,7 @@ interface SendMoneyFormProps {
     ussCodeKey: keyof typeof MOMO_USSD_CODES;
   }) => void;
 }
-export const SendMoneyForm: React.FC<SendMoneyFormProps> = ({
+export const PayGoodsForm: React.FC<PayGoodsFormProps> = ({
   onCancel,
   onConfirm,
   loading,
@@ -49,60 +44,16 @@ export const SendMoneyForm: React.FC<SendMoneyFormProps> = ({
 
   const [contactName, setContactName] = React.useState('');
   const formik = useFormik({
-    initialValues: { amount: '', phoneNumber: '' },
+    initialValues: { amount: '', paymentCode: '' },
     validationSchema,
     onSubmit: values => {
       onConfirm?.({
         amount: values.amount,
-        receiver: values.phoneNumber,
-        ussCodeKey: 'SEND_MONEY',
+        receiver: values.paymentCode,
+        ussCodeKey: 'PAY_GOOD_SERVICE',
       });
     },
   });
-
-  const requestPermission = async () => {
-    if (Platform.OS === 'android') {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
-        {
-          title: 'Contacts Permission',
-          message: 'This app needs access to your contacts',
-          buttonPositive: 'OK',
-        },
-      );
-      return granted === PermissionsAndroid.RESULTS.GRANTED;
-    }
-    return true;
-  };
-
-  const pickContact = async () => {
-    const hasPermission = await requestPermission();
-    if (!hasPermission) {
-      Alert.alert('Permission denied', 'Cannot access contacts');
-      return;
-    }
-    const { phoneNumber, contactName } = await selectContactPhone().then(
-      selection => {
-        if (!selection) {
-          Alert.alert('No contact selected', 'Please select a contact');
-          return {};
-        }
-
-        let { contact, selectedPhone } = selection;
-        const formattedPhone = removeCountryCode(selectedPhone.number);
-        const contactName = contact.name || 'Unknown Contact';
-        const contactType = selectedPhone.type || 'Unknown Type';
-
-        return { phoneNumber: formattedPhone, contactName, contactType };
-      },
-    );
-    if (contactName) {
-      setContactName(contactName);
-    }
-    if (phoneNumber) {
-      formik.setFieldValue('phoneNumber', phoneNumber);
-    }
-  };
 
   const handleCancel = () => {
     formik.resetForm();
@@ -115,31 +66,25 @@ export const SendMoneyForm: React.FC<SendMoneyFormProps> = ({
       <KeyboardAvoidingView style={styles.container}>
         <View>
           <TextInput
-            keyboardType="phone-pad"
+            keyboardType="number-pad"
             mode="outlined"
-            label={contactName.trim().slice(0, 15) ?? 'Phone Number'}
+            label={contactName.trim().slice(0, 15) ?? 'Payment Code'}
             style={styles.input}
             left={
               <TextInput.Icon
-                icon={props => <Icon name="Phone" {...props} />}
+                icon={props => <Icon name="Numbers" {...props} />}
               />
             }
-            right={
-              <TextInput.Icon
-                icon={props => <Icon name="AccountBox" {...props} />}
-                onPress={pickContact}
-              />
-            }
-            value={formik.values.phoneNumber}
+            value={formik.values.paymentCode}
             error={
-              formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)
+              formik.touched.paymentCode && Boolean(formik.errors.paymentCode)
             }
-            onChangeText={formik.handleChange('phoneNumber')}
-            onBlur={formik.handleBlur('phoneNumber')}
+            onChangeText={formik.handleChange('paymentCode')}
+            onBlur={formik.handleBlur('paymentCode')}
           />
-          {formik.touched.phoneNumber && formik.errors.phoneNumber ? (
+          {formik.touched.paymentCode && formik.errors.paymentCode ? (
             <Text style={{ color: theme.colors.error }}>
-              {formik.errors.phoneNumber}
+              {formik.errors.paymentCode}
             </Text>
           ) : null}
         </View>
@@ -171,7 +116,7 @@ export const SendMoneyForm: React.FC<SendMoneyFormProps> = ({
           loading={loading}
           disabled={loading}
         >
-          Send Money
+          Pay Goods/Service
         </Button>
         <Button
           mode="outlined"

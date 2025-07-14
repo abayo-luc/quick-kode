@@ -40,19 +40,18 @@ export const useUSSDEvent = () => {
     data: IMomoExtractedData,
     eventName: keyof typeof MOMO_USSD_CODES,
   ) => {
+    if (data.balance) {
+      dispatch(setMoMoBalance(data.balance));
+    }
     switch (eventName) {
-      case 'CHECK_BALANCE':
-        if (data.balance) {
-          dispatch(setMoMoBalance(data.balance));
-        }
-        break;
-
       case 'SEND_MONEY':
         if (data.send) {
           dispatch(addHistoryEntry(data.send));
         }
-        if (data.balance) {
-          dispatch(setMoMoBalance(data.balance));
+        break;
+      case 'PAY_GOOD_SERVICE':
+        if (data.payGoods) {
+          dispatch(addHistoryEntry(data.payGoods));
         }
         break;
 

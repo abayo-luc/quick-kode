@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { ScreenContainer } from '../../common/Container';
 import { Text } from 'react-native-paper';
 import { Alert, FlatList, StyleSheet, View } from 'react-native';
@@ -24,6 +24,13 @@ import {
   selectHistoryEntries,
   selectTransactionHistoryFees,
 } from '../../store/features/history/history.slice';
+import { PayGoodsForm } from './components/PayGoodsForm';
+import {
+  formatDate,
+  formatRelativeTime,
+  formatTime,
+  isToday,
+} from '../../common/helpers/date.helpers';
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -48,35 +55,46 @@ const styles = StyleSheet.create({
   },
 });
 
+type QuickActionType = keyof typeof MOMO_USSD_CODES;
+
 export const HomeScreen = () => {
   const sheetRef = useRef<BottomSheetModal>(null);
   const { dismiss } = useBottomSheetModal();
   const { loading, action, setAction } = useUSSDEvent();
+  const [currentActionForm, setCurrentActionForm] =
+    React.useState<QuickActionType>();
 
   const momoBalance = useSelector(selectMoMoBalance);
   const transactionFee = useSelector(selectTransactionHistoryFees);
   const historyData = useSelector(selectHistoryEntries);
 
-  const handleDailUSSD = async (
-    key: keyof typeof MOMO_USSD_CODES,
-    ussdCode: string,
-  ) => {
+  const handleDailUSSD = async (key: QuickActionType, ussdCode: string) => {
     setAction(key);
     return dialUSSD(ussdCode);
   };
 
   const onConfirmSendMoney = async (data: {
     amount?: string;
-    phoneNumber?: string;
-    ussCodeKey: keyof typeof MOMO_USSD_CODES;
+    receiver?: string;
+    ussCodeKey: QuickActionType;
   }) => {
     try {
-      if (data.ussCodeKey === 'SEND_MONEY' && data.amount && data.phoneNumber) {
+      if (data.ussCodeKey === 'SEND_MONEY' && data.amount && data.receiver) {
         const ussdCode = MOMO_USSD_CODES.SEND_MONEY.replace(
           '{phoneNumber}',
-          data.phoneNumber,
+          data.receiver,
         ).replace('{amount}', data.amount);
         await handleDailUSSD('SEND_MONEY', ussdCode);
+      } else if (
+        data.ussCodeKey === 'PAY_GOOD_SERVICE' &&
+        data.amount &&
+        data.receiver
+      ) {
+        const ussdCode = MOMO_USSD_CODES.PAY_GOOD_SERVICE.replace(
+          '{paymentCode}',
+          data.receiver,
+        ).replace('{amount}', data.amount);
+        await handleDailUSSD('PAY_GOOD_SERVICE', ussdCode);
       } else {
         Alert.alert(
           'Invalid USSD Code',
@@ -88,16 +106,15 @@ export const HomeScreen = () => {
     }
   };
 
-  const handleSendMoney = async () => {
-    sheetRef.current?.present?.();
-  };
-
-  const handlePayGoodService = () =>
-    handleDailUSSD('PAY_GOOD_SERVICE', MOMO_USSD_CODES.PAY_GOOD_SERVICE);
   const handleCheckBalance = () =>
     handleDailUSSD('CHECK_BALANCE', MOMO_USSD_CODES.CHECK_BALANCE);
   const handleBuyAirtime = () =>
     handleDailUSSD('BUY_AIRTIME', MOMO_USSD_CODES.BUY_AIRTIME);
+
+  const handleOpenQuickActionForm = async (actionType: QuickActionType) => {
+    setCurrentActionForm(actionType);
+    sheetRef.current?.present?.();
+  };
 
   const renderTransactionItem = ({ item }: { item: IHistoryData }) => {
     const phoneNumber = removeCountryCode(item.transaction?.phoneNumber || '');
@@ -112,18 +129,51 @@ export const HomeScreen = () => {
       description = `Airtime purchase from ${
         getProviderFromPhone(phoneNumber) || 'Unknown'
       }`;
+    } else if (item.action === 'PAY_GOOD_SERVICE') {
+      description = `Paid to ${item.transaction?.name}, Code: ${item.transaction?.paymentCode}`;
     } else {
       description = '';
+    }
+    const extraProps = { rightUpText: '', rightBottomText: '' };
+    if (!isToday(item.timestamp)) {
+      extraProps['rightUpText'] = formatRelativeTime(item.timestamp);
+    } else {
+      extraProps['rightUpText'] = formatDate(item.timestamp);
+      extraProps['rightBottomText'] = formatTime(item.timestamp, 'hh:mm A');
     }
     return (
       <TransactionHistoryItem
         type={item.action}
         title={formatCurrency(item.transaction?.amount || 0)}
         description={description}
+        {...extraProps}
+        // rightUpText={formatRelativeTime(item.timestamp)}
+        // rightBottomText={formatTime(item.timestamp, 'HH:mm')}
       />
     );
   };
 
+  const renderBottomSheetContent = useMemo(() => {
+    if (currentActionForm === 'SEND_MONEY') {
+      return (
+        <SendMoneyForm
+          onCancel={dismiss}
+          onConfirm={onConfirmSendMoney}
+          loading={loading && action === 'SEND_MONEY'}
+        />
+      );
+    }
+    if (currentActionForm === 'PAY_GOOD_SERVICE') {
+      return (
+        <PayGoodsForm
+          onCancel={dismiss}
+          onConfirm={onConfirmSendMoney}
+          loading={loading && action === 'PAY_GOOD_SERVICE'}
+        />
+      );
+    }
+    return null;
+  }, [action, currentActionForm, loading]);
   return (
     <ScreenContainer>
       <View style={styles.statSection}>
@@ -142,18 +192,16 @@ export const HomeScreen = () => {
         style={styles.quickActionContainer}
         handleBuyAirtime={handleBuyAirtime}
         handleCheckBalance={handleCheckBalance}
-        handlePayGoodService={handlePayGoodService}
-        handleSendMoney={handleSendMoney}
+        handlePayGoodService={() =>
+          handleOpenQuickActionForm('PAY_GOOD_SERVICE')
+        }
+        handleSendMoney={() => handleOpenQuickActionForm('SEND_MONEY')}
         currentCode={action}
         loading={loading}
       />
 
       <CustomBottomSheet ref={sheetRef}>
-        <SendMoneyForm
-          onCancel={dismiss}
-          onConfirm={onConfirmSendMoney}
-          loading={loading && action === 'SEND_MONEY'}
-        />
+        {renderBottomSheetContent}
       </CustomBottomSheet>
       {historyData.length > 0 && (
         <>

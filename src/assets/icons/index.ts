@@ -12,6 +12,8 @@ import CreditCard from './credit-card.svg';
 import AppSettings from './app-settings.svg';
 import Cash from './cash.svg';
 import AccountBox from './account-box.svg';
+import Numbers from './numbers.svg';
+import CreditScore from './credit-score.svg';
 
 export const icons = {
   ArrowTopRight,
@@ -27,4 +29,6 @@ export const icons = {
   AppSettings,
   Cash,
   AccountBox,
+  Numbers,
+  CreditScore,
 };
