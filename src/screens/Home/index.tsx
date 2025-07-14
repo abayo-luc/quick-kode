@@ -147,8 +147,6 @@ export const HomeScreen = () => {
         title={formatCurrency(item.transaction?.amount || 0)}
         description={description}
         {...extraProps}
-        // rightUpText={formatRelativeTime(item.timestamp)}
-        // rightBottomText={formatTime(item.timestamp, 'HH:mm')}
       />
     );
   };
