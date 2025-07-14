@@ -4,6 +4,8 @@ import React from 'react';
 import { Style } from 'react-native-paper/lib/typescript/components/List/utils';
 import { StyleSheet, View } from 'react-native';
 import globalStyles from '../../../common/styles/global.styles';
+import { DEVICE_DIMENSIONS } from '../../../common/components/constants';
+import { ThemeSpacings } from '../../../config/theme';
 
 interface TransactionHistoryItemProps {
   type: IHistoryData['action'];
@@ -36,12 +38,12 @@ export const TransactionHistoryItem: React.FC<TransactionHistoryItemProps> = ({
             styles.iconContainer,
 
             {
-              backgroundColor: theme.colors.outline,
+              backgroundColor: theme.colors.primaryContainer,
               borderRadius: theme.roundness,
             },
           ]}
         >
-          <Icon name={iconNames[type]} color={props.color} size={34} />
+          <Icon name={iconNames[type]} color={props.color} size={32} />
         </View>
       );
     }
@@ -51,12 +53,8 @@ export const TransactionHistoryItem: React.FC<TransactionHistoryItemProps> = ({
   const renderRightContent = (props: ItemExtraComponentProps) => {
     if (rightUpText || rightBottomText) {
       return (
-        <View style={[props.style, styles.rightContentContainer]}>
-          {rightUpText && (
-            <Text variant="bodySmall" style={{ color: props.color }}>
-              {rightUpText}
-            </Text>
-          )}
+        <View style={[styles.rightContentContainer]}>
+          {rightUpText && <Text variant="bodySmall">{rightUpText}</Text>}
           {rightBottomText && (
             <Text variant="bodySmall" style={{ color: props.color }}>
               {rightBottomText}
@@ -85,11 +83,12 @@ export const TransactionHistoryItem: React.FC<TransactionHistoryItemProps> = ({
 
 const styles = StyleSheet.create({
   iconContainer: {
-    padding: 4,
+    padding: 6,
     ...globalStyles.centered,
   },
   containerStyle: {
     ...globalStyles.centered,
+    width: DEVICE_DIMENSIONS.width - ThemeSpacings.md * 2,
   },
   rightContentContainer: {
     //alignSelf: 'stretch',

@@ -139,7 +139,7 @@ export const HomeScreen = () => {
       extraProps['rightUpText'] = formatRelativeTime(item.timestamp);
     } else {
       extraProps['rightUpText'] = formatDate(item.timestamp);
-      extraProps['rightBottomText'] = formatTime(item.timestamp, 'hh:mm A');
+      extraProps['rightBottomText'] = formatTime(item.timestamp, 'hh:mm');
     }
     return (
       <TransactionHistoryItem

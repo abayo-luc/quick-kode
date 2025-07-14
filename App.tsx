@@ -25,8 +25,8 @@ function App(): React.JSX.Element {
   }, []);
 
   SystemNavigationBar.setNavigationColor(
-    theme.colors.background,
-    isDarkMode ? 'dark' : 'light',
+    theme.colors.background, // background color for system navigation bar
+    isDarkMode ? 'light' : 'dark', // color for system navigation bar item (light if dark mode, dark if light mode)
   );
 
   return (
