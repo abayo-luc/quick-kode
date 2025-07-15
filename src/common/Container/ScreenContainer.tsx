@@ -1,28 +1,30 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { ThemeSpacings } from '../../config/theme';
 import globalStyles from '../styles/global.styles';
 
-const styles = StyleSheet.create({
+export const screenContainerStyle = StyleSheet.create({
   container: {
     flex: 1,
-    padding: ThemeSpacings.md,
     ...globalStyles.column,
     gap: ThemeSpacings.md,
   },
 });
 
-interface ScreenContainerProps {
+interface ContainerProps {
   children: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
 }
-export const ScreenContainer: React.FC<ScreenContainerProps> = ({
-  children,
-}) => {
+export const Container: React.FC<ContainerProps> = ({ children, style }) => {
   const theme = useTheme();
   return (
     <View
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
+      style={[
+        screenContainerStyle.container,
+        { backgroundColor: theme.colors.background },
+        style, // Allow additional styles to be passed in
+      ]}
     >
       {children}
     </View>

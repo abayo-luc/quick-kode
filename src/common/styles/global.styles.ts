@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { ThemeSpacings } from '../../config/theme';
 
 export default StyleSheet.create({
   row: {
@@ -26,5 +27,16 @@ export default StyleSheet.create({
   centered: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  flatListContent: {
+    gap: ThemeSpacings.md,
+    padding: ThemeSpacings.md,
+  },
+  horizontalSpacing: {
+    paddingHorizontal: ThemeSpacings.md,
+  },
+  verticalSpacing: {
+    paddingVertical: ThemeSpacings.md,
   },
 });

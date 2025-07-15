@@ -1,5 +1,5 @@
 import React, { useMemo, useRef } from 'react';
-import { ScreenContainer } from '../../common/Container';
+import { Container } from '../../common/Container';
 import { Text } from 'react-native-paper';
 import { Alert, FlatList, StyleSheet, View } from 'react-native';
 import globalStyles from '../../common/styles/global.styles';
@@ -33,15 +33,11 @@ import {
 } from '../../common/helpers/date.helpers';
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    ...globalStyles.row,
-    gap: ThemeSpacings.lg,
-    alignItems: 'center',
-  },
   quickActionContainer: {
     ...globalStyles.row,
     gap: ThemeSpacings.md,
     flexWrap: 'wrap',
+    ...globalStyles.horizontalSpacing,
   },
   statSection: {
     ...globalStyles.row,
@@ -49,9 +45,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     flexWrap: 'wrap',
-  },
-  flatListContent: {
-    gap: ThemeSpacings.sm,
+    ...globalStyles.horizontalSpacing,
   },
 });
 
@@ -173,19 +167,14 @@ export const HomeScreen = () => {
     return null;
   }, [action, currentActionForm, loading]);
   return (
-    <ScreenContainer>
+    <Container>
       <View style={styles.statSection}>
-        <StatCard
-          title="Available Balance"
-          value={formatCurrency(momoBalance)}
-        />
-        <StatCard
-          title="Fees"
-          value={formatCurrency(transactionFee)}
-          style={{ width: '48%' }}
-        />
+        <StatCard title="Balance" value={formatCurrency(momoBalance)} />
+        <StatCard title="Fees" value={formatCurrency(transactionFee)} />
       </View>
-      <Text variant="titleMedium">Quick Actions</Text>
+      <Text variant="titleMedium" style={globalStyles.horizontalSpacing}>
+        Quick Actions
+      </Text>
       <HomeQuickActions
         style={styles.quickActionContainer}
         handleBuyAirtime={handleBuyAirtime}
@@ -202,16 +191,16 @@ export const HomeScreen = () => {
         {renderBottomSheetContent}
       </CustomBottomSheet>
       {historyData.length > 0 && (
-        <>
-          <Text variant="titleMedium">Recent History</Text>
-          <FlatList
-            data={historyData}
-            keyExtractor={item => item.id}
-            renderItem={renderTransactionItem}
-            contentContainerStyle={styles.flatListContent}
-          />
-        </>
+        <FlatList
+          data={historyData}
+          keyExtractor={item => item.id}
+          renderItem={renderTransactionItem}
+          contentContainerStyle={globalStyles.flatListContent}
+          ListHeaderComponent={
+            <Text variant="titleMedium">Recent History</Text>
+          }
+        />
       )}
-    </ScreenContainer>
+    </Container>
   );
 };

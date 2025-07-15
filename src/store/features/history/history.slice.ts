@@ -20,9 +20,10 @@ const { actions, reducer } = historySlice;
 export const { addHistoryEntry } = actions;
 export default reducer;
 
-export const selectHistoryEntries = (state: RootState) => state.history.history;
+export const selectHistoryEntries = (state: RootState) =>
+  state.history.history.sort((a, b) => b.timestamp - a.timestamp);
 export const selectRecentHistoryEntries = (state: RootState) =>
-  state.history.history.slice(0, 5);
+  state.history.history.sort((a, b) => b.timestamp - a.timestamp).slice(0, 5);
 
 export const selectTransactionHistoryFees = (state: RootState) =>
   state.history.history.reduce((total, entry) => {

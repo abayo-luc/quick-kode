@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import { DEVICE_DIMENSIONS } from '../constants';
 import { BasicCard } from './BasicCard';
 import globalStyles from '../../styles/global.styles';
+import { ThemeSpacings } from '../../../config/theme';
 
 interface StatCardProps {
   title: string;
@@ -13,7 +14,7 @@ interface StatCardProps {
 
 const styles = StyleSheet.create({
   container: {
-    minWidth: DEVICE_DIMENSIONS.width * 0.35,
+    minWidth: DEVICE_DIMENSIONS.width / 2 - ThemeSpacings.md * 2,
   },
 });
 

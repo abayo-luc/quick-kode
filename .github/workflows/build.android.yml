@@ -42,8 +42,7 @@ jobs:
           gradle-version: '8.13'
 
       - name: Build Debug APK
-        run: yarn android:build-release
-
+        run: yarn build:android:prod
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
