@@ -1,10 +1,10 @@
 import { Text } from 'react-native-paper';
-import { ScreenContainer } from '../../common/Container';
+import { Container } from '../../common/Container';
 
 export const SettingsScreen = () => {
   return (
-    <ScreenContainer>
+    <Container>
       <Text>Hello Settings</Text>
-    </ScreenContainer>
+    </Container>
   );
 };
