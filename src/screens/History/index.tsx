@@ -16,10 +16,7 @@ export const HistoryScreen = () => {
   );
   return (
     <FlatList
-      data={[...data, ...data, ...data, ...data].map((item, index) => ({
-        ...item,
-        id: `${item.id}-${index}`,
-      }))}
+      data={data}
       renderItem={_renderItem}
       keyExtractor={item => item.id}
       contentContainerStyle={globalStyles.flatListContent}
