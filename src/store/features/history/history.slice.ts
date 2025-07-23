@@ -1,4 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { createSelector } from '@reduxjs/toolkit';
+
 import { RootState } from '../..';
 
 const initialState: { history: IHistoryData[] } = {
@@ -20,12 +22,15 @@ const { actions, reducer } = historySlice;
 export const { addHistoryEntry } = actions;
 export default reducer;
 
-export const selectHistoryEntries = (state: RootState) =>
-  [...state.history.history].sort((a, b) => b.timestamp - a.timestamp);
-export const selectRecentHistoryEntries = (state: RootState) =>
-  [...state.history.history]
-    .sort((a, b) => b.timestamp - a.timestamp)
-    .slice(0, 5);
+export const selectHistoryEntries = createSelector(
+  (state: RootState) => state.history.history,
+  history => [...history].sort((a, b) => b.timestamp - a.timestamp),
+);
+
+export const selectRecentHistoryEntries = createSelector(
+  selectHistoryEntries,
+  sortedHistory => sortedHistory.slice(0, 5),
+);
 
 export const selectTransactionHistoryFees = (state: RootState) =>
   state.history.history.reduce((total, entry) => {

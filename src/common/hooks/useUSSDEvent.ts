@@ -30,9 +30,10 @@ export const useUSSDEvent = () => {
 
   // Helper: Reset state and mark error if needed
   const resetEventState = (isError: boolean) => {
-    setIsLoading(true);
+    setIsLoading(false);
     setFailed(isError);
     setCurrentMessage(null);
+    prevMessageRef.current = null;
   };
 
   // Helper: Dispatch parsed USSD data into Redux store
@@ -65,10 +66,17 @@ export const useUSSDEvent = () => {
     (event: { message: string }) => {
       const message = event.message;
 
-      const isError =
-        message?.includes('invalid MMI code') || message?.includes('error');
+      const isError = ['invalid MMI code', 'error', 'problem'].some(err =>
+        message.toLowerCase()?.includes(err.toLowerCase()),
+      );
 
-      if (message?.includes('running…') || isError) {
+      if (message.toLowerCase().includes('running…')) {
+        setIsLoading(true);
+        setFailed(false);
+        return;
+      }
+
+      if (isError) {
         resetEventState(isError);
         return;
       }

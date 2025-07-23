@@ -21,7 +21,6 @@ export const extractMomoUSSDData = (
   previousMessage: string | null,
   action: IHistoryData['action'] | null,
 ) => {
-  console.log({ currentMessage, previousMessage });
   //let text = currentMessage.trim();
   const extractedData: IMomoExtractedData = {
     balance: null,
@@ -88,14 +87,18 @@ export const extractMomoUSSDData = (
       currentMessage.startsWith("Y'ello. Wishyuye") ||
       currentMessage.startsWith('Wishyuye'))
   ) {
-    const [_, amount, names, paymentCode, fees, transactionId, balance] =
-      currentMessage.match(
-        /Wishyuye\s([\d,]+)\sRWF\s+kuri\s(.+?),\s(\w+)\. Ikiguzi\s([\d,]+)\sRWF\. Transaction ID\s(\w+)\. .*?usigaranye (?:no|ho)\s([\d,]+)\sRWF/i,
-      ) || [];
+    const amount = currentMessage.match(/Wishyuye (.*?) RWF/)?.[1];
+    const names = currentMessage.match(/kuri (.+?),/)?.[1];
+    // Extract paymentCode as the word that follows names (after "kuri {names},")
+    const paymentCode = currentMessage
+      .match(/kuri .+?,\s*(\S+)/)?.[1]
+      ?.replace('.', '');
+    const fees = currentMessage.match(/ikiguzi (.+?) RWF/)?.[1];
+    const transactionId =
+      currentMessage.match(/Transaction ID 2 (\d+)/)?.[1] ||
+      currentMessage.match(/Transaction ID (\d+)/)?.[1];
 
-    if (balance) {
-      extractedData.balance = balance.replace(/,/g, '');
-    }
+    // TODO: extract balance if available
 
     if (paymentCode && amount) {
       extractedData['payGoods'] = {

@@ -43,7 +43,7 @@ export const TransactionHistoryItem: React.FC<TransactionHistoryItemProps> = ({
             },
           ]}
         >
-          <Icon name={iconNames[type]} color={props.color} size={32} />
+          <Icon name={iconNames[type]} color={props.color} size={28} />
         </View>
       );
     }

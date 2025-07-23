@@ -6,6 +6,11 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  spacedRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   column: {
     flexDirection: 'column',
     alignItems: 'flex-start',
@@ -32,6 +37,7 @@ export default StyleSheet.create({
   flatListContent: {
     gap: ThemeSpacings.md,
     padding: ThemeSpacings.md,
+    paddingBottom: ThemeSpacings.lg,
   },
   horizontalSpacing: {
     paddingHorizontal: ThemeSpacings.md,

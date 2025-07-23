@@ -1,54 +1,30 @@
 import * as React from 'react';
-import { HomeScreen, SettingsScreen, HistoryScreen } from '../screens';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Icon } from '../common/components';
-import { ThemeSpacings } from '../config/theme';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { HomeTabs } from './HomeTabs';
+import { AllTransactions } from '../screens/AllTransactions';
+import { HomeStackParamList } from './types';
+import { HomeStackScreens } from './navigation.constants';
 
-const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator<HomeStackParamList>();
 
 export const HomeStack = () => {
   return (
-    <Tab.Navigator
+    <Stack.Navigator
+      initialRouteName={HomeStackScreens.HomeTabs}
       screenOptions={{
-        tabBarStyle: {
-          marginVertical: ThemeSpacings.sm,
-        },
+        animation: 'slide_from_right',
       }}
     >
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          tabBarLabel: 'Home',
-          headerTitle: 'Quick Kode',
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="Home" color={color} size={size} />
-          ),
-        }}
+      <Stack.Screen
+        name={HomeStackScreens.HomeTabs}
+        component={HomeTabs}
+        options={{ headerShown: false }}
       />
-
-      <Tab.Screen
-        name="History"
-        component={HistoryScreen}
-        options={{
-          tabBarLabel: 'History',
-          headerTitle: 'USSD History',
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="History" color={color} size={size} />
-          ),
-        }}
+      <Stack.Screen
+        name={HomeStackScreens.AllTransactions}
+        component={AllTransactions}
+        options={{ presentation: 'modal', title: 'All Transactions' }} // Modal presentation for this screen
       />
-      <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{
-          tabBarLabel: 'Settings',
-          headerTitle: 'Settings',
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="AppSettings" color={color} size={size} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
+    </Stack.Navigator>
   );
 };

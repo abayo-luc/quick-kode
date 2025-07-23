@@ -1,14 +1,9 @@
 import React, { useMemo, useRef } from 'react';
 import { Container } from '../../common/Container';
 import { Text } from 'react-native-paper';
-import { Alert, FlatList, StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import globalStyles from '../../common/styles/global.styles';
 import { ThemeSpacings } from '../../config/theme';
-import {
-  getProviderFromPhone,
-  removeCountryCode,
-} from '../../common/helpers/phone.helpers';
-import { TransactionHistoryItem } from './components/TransactionHistoryItem';
 import { dialUSSD } from '../../common/helpers/ussd.helpers';
 import { MOMO_USSD_CODES } from '../../common/helpers/ussd.momo.helper';
 import { CustomBottomSheet } from '../../common/components/CustomBottomSheet';
@@ -21,16 +16,13 @@ import { formatCurrency } from '../../common/helpers/currency.helpers';
 import { useSelector } from 'react-redux';
 import { selectMoMoBalance } from '../../store/features/momo/momo.slice';
 import {
-  selectHistoryEntries,
+  selectRecentHistoryEntries,
   selectTransactionHistoryFees,
 } from '../../store/features/history/history.slice';
 import { PayGoodsForm } from './components/PayGoodsForm';
-import {
-  formatDate,
-  formatRelativeTime,
-  formatTime,
-  isToday,
-} from '../../common/helpers/date.helpers';
+import { TransactionsList } from './components/TransactionsList';
+import { useNavigation } from '@react-navigation/native';
+import { HomeStackScreens } from '../../navigation/navigation.constants';
 
 const styles = StyleSheet.create({
   quickActionContainer: {
@@ -50,17 +42,18 @@ const styles = StyleSheet.create({
 });
 
 type QuickActionType = keyof typeof MOMO_USSD_CODES;
-
+type BottomSheetContentType = QuickActionType | 'FULL_HISTORY_VIEW';
 export const HomeScreen = () => {
+  const navigation = useNavigation();
   const sheetRef = useRef<BottomSheetModal>(null);
   const { dismiss } = useBottomSheetModal();
   const { loading, action, setAction } = useUSSDEvent();
-  const [currentActionForm, setCurrentActionForm] =
-    React.useState<QuickActionType>();
+  const [bottomSheetContentType, setBottomSheetContentType] =
+    React.useState<BottomSheetContentType>();
 
   const momoBalance = useSelector(selectMoMoBalance);
   const transactionFee = useSelector(selectTransactionHistoryFees);
-  const historyData = useSelector(selectHistoryEntries);
+  const transactions = useSelector(selectRecentHistoryEntries);
 
   const handleDailUSSD = async (key: QuickActionType, ussdCode: string) => {
     setAction(key);
@@ -105,48 +98,13 @@ export const HomeScreen = () => {
   const handleBuyAirtime = () =>
     handleDailUSSD('BUY_AIRTIME', MOMO_USSD_CODES.BUY_AIRTIME);
 
-  const handleOpenQuickActionForm = async (actionType: QuickActionType) => {
-    setCurrentActionForm(actionType);
+  const handleOpenBottomSheet = async (actionType: BottomSheetContentType) => {
+    setBottomSheetContentType(actionType);
     sheetRef.current?.present?.();
   };
 
-  const renderTransactionItem = ({ item }: { item: IHistoryData }) => {
-    const phoneNumber = removeCountryCode(item.transaction?.phoneNumber || '');
-
-    let description: string = '';
-    if (item.action === 'SEND_MONEY') {
-      description = `Sent to ${item.transaction?.name}`;
-      if (phoneNumber) {
-        description += ` - ${removeCountryCode(phoneNumber)}`;
-      }
-    } else if (item.action === 'BUY_AIRTIME') {
-      description = `Airtime purchase from ${
-        getProviderFromPhone(phoneNumber) || 'Unknown'
-      }`;
-    } else if (item.action === 'PAY_GOOD_SERVICE') {
-      description = `Paid to ${item.transaction?.name}, Code: ${item.transaction?.paymentCode}`;
-    } else {
-      description = '';
-    }
-    const extraProps = { rightUpText: '', rightBottomText: '' };
-    if (!isToday(item.timestamp)) {
-      extraProps['rightUpText'] = formatRelativeTime(item.timestamp);
-    } else {
-      extraProps['rightUpText'] = formatDate(item.timestamp);
-      extraProps['rightBottomText'] = formatTime(item.timestamp, 'hh:mm');
-    }
-    return (
-      <TransactionHistoryItem
-        type={item.action}
-        title={formatCurrency(item.transaction?.amount || 0)}
-        description={description}
-        {...extraProps}
-      />
-    );
-  };
-
   const renderBottomSheetContent = useMemo(() => {
-    if (currentActionForm === 'SEND_MONEY') {
+    if (bottomSheetContentType === 'SEND_MONEY') {
       return (
         <SendMoneyForm
           onCancel={dismiss}
@@ -155,7 +113,7 @@ export const HomeScreen = () => {
         />
       );
     }
-    if (currentActionForm === 'PAY_GOOD_SERVICE') {
+    if (bottomSheetContentType === 'PAY_GOOD_SERVICE') {
       return (
         <PayGoodsForm
           onCancel={dismiss}
@@ -164,8 +122,9 @@ export const HomeScreen = () => {
         />
       );
     }
+
     return null;
-  }, [action, currentActionForm, loading]);
+  }, [action, bottomSheetContentType, loading]);
   return (
     <Container>
       <View style={styles.statSection}>
@@ -179,28 +138,21 @@ export const HomeScreen = () => {
         style={styles.quickActionContainer}
         handleBuyAirtime={handleBuyAirtime}
         handleCheckBalance={handleCheckBalance}
-        handlePayGoodService={() =>
-          handleOpenQuickActionForm('PAY_GOOD_SERVICE')
-        }
-        handleSendMoney={() => handleOpenQuickActionForm('SEND_MONEY')}
+        handlePayGoodService={() => handleOpenBottomSheet('PAY_GOOD_SERVICE')}
+        handleSendMoney={() => handleOpenBottomSheet('SEND_MONEY')}
         currentCode={action}
         loading={loading}
       />
-
+      <TransactionsList
+        data={transactions}
+        onViewAllPress={() =>
+          navigation.navigate(HomeStackScreens.AllTransactions)
+        }
+        title="Recent Transactions"
+      />
       <CustomBottomSheet ref={sheetRef}>
         {renderBottomSheetContent}
       </CustomBottomSheet>
-      {historyData.length > 0 && (
-        <FlatList
-          data={historyData}
-          keyExtractor={item => item.id}
-          renderItem={renderTransactionItem}
-          contentContainerStyle={globalStyles.flatListContent}
-          ListHeaderComponent={
-            <Text variant="titleMedium">Recent History</Text>
-          }
-        />
-      )}
     </Container>
   );
 };
