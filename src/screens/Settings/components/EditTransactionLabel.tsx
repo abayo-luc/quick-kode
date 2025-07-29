@@ -53,7 +53,9 @@ export const EditTransactionLabel = () => {
         onSubmitEditing={handleSubmit}
         style={globalStyles.fullWidth}
       />
-      <View style={[globalStyles.row, { gap: 16, flexWrap: 'wrap' }]}>
+      <View
+        style={[globalStyles.row, { gap: ThemeSpacings.md, flexWrap: 'wrap' }]}
+      >
         {Object.values(transactionLabels).map(label => {
           return (
             <Chip

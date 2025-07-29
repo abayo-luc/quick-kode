@@ -65,11 +65,15 @@ export const TransactionsList: React.FC<TransactionsListProps> = ({
     } else {
       description = '';
     }
-    const extraProps = { rightUpText: '' };
-    if (!isToday(item.timestamp)) {
+    const extraProps = { rightUpText: '', rightBottomText: '' };
+    if (isToday(item.timestamp)) {
       extraProps['rightUpText'] = formatRelativeTime(item.timestamp);
     } else {
-      extraProps['rightUpText'] = formatDate(item.timestamp);
+      extraProps['rightUpText'] = formatDate(item.timestamp, 'DD/MM/YY');
+    }
+
+    if (item.label) {
+      extraProps['rightBottomText'] = item.label;
     }
     return (
       <TouchableOpacity
@@ -82,7 +86,6 @@ export const TransactionsList: React.FC<TransactionsListProps> = ({
           type={item.action}
           title={formatCurrency(item.transaction?.amount || 0)}
           description={description}
-          rightBottomText={item.label}
           {...extraProps}
         />
       </TouchableOpacity>
@@ -130,7 +133,12 @@ export const TransactionsList: React.FC<TransactionsListProps> = ({
           style={{ borderRadius: theme.roundness }}
         >
           <Dialog.Content>
-            <View style={[globalStyles.row, { gap: ThemeSpacings.md }]}>
+            <View
+              style={[
+                globalStyles.row,
+                { gap: ThemeSpacings.md, flexWrap: 'wrap' },
+              ]}
+            >
               {Object.values(transactionLabels).map(label => {
                 return (
                   <Chip
@@ -157,7 +165,7 @@ export const TransactionsList: React.FC<TransactionsListProps> = ({
               })}
             </View>
           </Dialog.Content>
-          <Dialog.Actions style={[globalStyles.removePadding]}>
+          <Dialog.Actions>
             <Button onPress={() => setShowLabelDialog(false)}>Close</Button>
           </Dialog.Actions>
         </Dialog>
