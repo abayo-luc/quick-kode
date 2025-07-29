@@ -9,11 +9,16 @@ import History from './history.svg';
 import PhonePause from './phone-paused.svg';
 import SendMoney from './send-money.svg';
 import CreditCard from './credit-card.svg';
-import AppSettings from './app-settings.svg';
 import Cash from './cash.svg';
 import AccountBox from './account-box.svg';
 import Numbers from './numbers.svg';
 import CreditScore from './credit-score.svg';
+import Settings from './settings.svg';
+import Styles from './styles.svg';
+import ArrowForward from './arrow-forward.svg';
+import ArrowBack from './arrow-back.svg';
+import Close from './close.svg';
+import Check from './check.svg';
 
 export const icons = {
   ArrowTopRight,
@@ -26,9 +31,14 @@ export const icons = {
   PhonePause,
   SendMoney,
   CreditCard,
-  AppSettings,
   Cash,
   AccountBox,
   Numbers,
   CreditScore,
+  Settings,
+  Styles,
+  ArrowBack,
+  ArrowForward,
+  Close,
+  Check,
 };

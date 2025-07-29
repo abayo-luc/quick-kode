@@ -3,6 +3,7 @@ import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { ThemeSpacings } from '../../config/theme';
 import globalStyles from '../styles/global.styles';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export const screenContainerStyle = StyleSheet.create({
   container: {

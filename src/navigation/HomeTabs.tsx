@@ -47,7 +47,7 @@ export const HomeTabs = () => {
           tabBarLabel: 'Settings',
           headerTitle: 'Settings',
           tabBarIcon: ({ color, size }) => (
-            <Icon name="AppSettings" color={color} size={size} />
+            <Icon name="Settings" color={color} size={size} />
           ),
         }}
       />

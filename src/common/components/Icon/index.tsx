@@ -1,6 +1,6 @@
 import React from 'react';
-import {icons} from '../../../assets/icons';
-import {useTheme} from 'react-native-paper';
+import { icons } from '../../../assets/icons';
+import { useTheme } from 'react-native-paper';
 
 export interface IconProps {
   name: keyof typeof icons;
