@@ -1,4 +1,4 @@
-import { List, Text, useTheme } from 'react-native-paper';
+import { Badge, List, Text, useTheme } from 'react-native-paper';
 import { Icon, IconProps } from '../../../common/components/Icon';
 import React from 'react';
 import { Style } from 'react-native-paper/lib/typescript/components/List/utils';
@@ -56,9 +56,9 @@ export const TransactionHistoryItem: React.FC<TransactionHistoryItemProps> = ({
         <View style={[styles.rightContentContainer]}>
           {rightUpText && <Text variant="bodySmall">{rightUpText}</Text>}
           {rightBottomText && (
-            <Text variant="bodySmall" style={{ color: props.color }}>
+            <Badge selectionColor={props.color} size={20}>
               {rightBottomText}
-            </Text>
+            </Badge>
           )}
         </View>
       );
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     width: DEVICE_DIMENSIONS.width - ThemeSpacings.md * 2,
   },
   rightContentContainer: {
-    //alignSelf: 'stretch',
+    alignSelf: 'stretch',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
   },

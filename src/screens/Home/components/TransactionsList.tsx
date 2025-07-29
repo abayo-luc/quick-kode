@@ -1,6 +1,13 @@
-import React from 'react';
-import { Button, Text } from 'react-native-paper';
-import { FlatList, View } from 'react-native';
+import React, { useState } from 'react';
+import {
+  Button,
+  Chip,
+  Dialog,
+  Portal,
+  Text,
+  useTheme,
+} from 'react-native-paper';
+import { FlatList, TouchableOpacity, View } from 'react-native';
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import globalStyles from '../../../common/styles/global.styles';
 import {
@@ -16,6 +23,12 @@ import {
   isToday,
 } from '../../../common/helpers/date.helpers';
 import { formatCurrency } from '../../../common/helpers/currency.helpers';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectTransactionLabels } from '../../../store/features/settings/settings.slice';
+import { ThemeSpacings } from '../../../config/theme';
+import { Icon } from '../../../common/components';
+import { addLabelToTransaction } from '../../../store/features/history/history.slice';
+import { to_snake_case } from '../../../common/helpers/utils';
 
 interface TransactionsListProps {
   data: IHistoryData[];
@@ -27,6 +40,13 @@ export const TransactionsList: React.FC<TransactionsListProps> = ({
   onViewAllPress,
   title,
 }) => {
+  const theme = useTheme();
+  const dispatch = useDispatch();
+  const transactionLabels = useSelector(selectTransactionLabels);
+  const [showLabelDialog, setShowLabelDialog] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<IHistoryData | null>(null);
+
   const renderTransactionItem = ({ item }: { item: IHistoryData }) => {
     const phoneNumber = removeCountryCode(item.transaction?.phoneNumber || '');
 
@@ -45,20 +65,27 @@ export const TransactionsList: React.FC<TransactionsListProps> = ({
     } else {
       description = '';
     }
-    const extraProps = { rightUpText: '', rightBottomText: '' };
+    const extraProps = { rightUpText: '' };
     if (!isToday(item.timestamp)) {
       extraProps['rightUpText'] = formatRelativeTime(item.timestamp);
     } else {
       extraProps['rightUpText'] = formatDate(item.timestamp);
-      extraProps['rightBottomText'] = formatTime(item.timestamp, 'hh:mm');
     }
     return (
-      <TransactionHistoryItem
-        type={item.action}
-        title={formatCurrency(item.transaction?.amount || 0)}
-        description={description}
-        {...extraProps}
-      />
+      <TouchableOpacity
+        onLongPress={() => {
+          setShowLabelDialog(true);
+          setSelectedTransaction(item);
+        }}
+      >
+        <TransactionHistoryItem
+          type={item.action}
+          title={formatCurrency(item.transaction?.amount || 0)}
+          description={description}
+          rightBottomText={item.label}
+          {...extraProps}
+        />
+      </TouchableOpacity>
     );
   };
 
@@ -81,13 +108,60 @@ export const TransactionsList: React.FC<TransactionsListProps> = ({
     }
     return null;
   };
+
+  const handleAddLabelToTransaction = (
+    payload: Pick<IHistoryData, 'id' | 'label'>,
+  ) => {
+    dispatch(addLabelToTransaction(payload));
+  };
   return (
-    <FlatList
-      data={data}
-      keyExtractor={item => item.id}
-      renderItem={renderTransactionItem}
-      contentContainerStyle={[globalStyles.flatListContent, { gap: 0 }]}
-      ListHeaderComponent={renderHeader}
-    />
+    <>
+      <FlatList
+        data={data}
+        keyExtractor={item => item.id}
+        renderItem={renderTransactionItem}
+        contentContainerStyle={[globalStyles.flatListContent, { gap: 0 }]}
+        ListHeaderComponent={renderHeader}
+      />
+      <Portal>
+        <Dialog
+          visible={showLabelDialog}
+          onDismiss={() => setShowLabelDialog(false)}
+          style={{ borderRadius: theme.roundness }}
+        >
+          <Dialog.Content>
+            <View style={[globalStyles.row, { gap: ThemeSpacings.md }]}>
+              {Object.values(transactionLabels).map(label => {
+                return (
+                  <Chip
+                    key={label.name}
+                    icon={() =>
+                      to_snake_case(selectedTransaction?.label || '') ===
+                      to_snake_case(label.name) ? (
+                        <Icon name="Check" color={theme.colors.primary} />
+                      ) : null
+                    }
+                    onPress={() => {
+                      if (selectedTransaction?.id) {
+                        handleAddLabelToTransaction({
+                          id: selectedTransaction.id,
+                          label: label.name,
+                        });
+                      }
+                      setShowLabelDialog(false);
+                    }}
+                  >
+                    {label.name}
+                  </Chip>
+                );
+              })}
+            </View>
+          </Dialog.Content>
+          <Dialog.Actions style={[globalStyles.removePadding]}>
+            <Button onPress={() => setShowLabelDialog(false)}>Close</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    </>
   );
 };

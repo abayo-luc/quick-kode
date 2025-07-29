@@ -14,12 +14,22 @@ const historySlice = createSlice({
     addHistoryEntry(state, action) {
       state.history.push(action.payload);
     },
+    addLabelToTransaction(
+      state,
+      action: { payload: Pick<IHistoryData, 'id' | 'label'>; type: string },
+    ) {
+      const { id, label } = action.payload;
+      const entry = state.history.find(entry => entry.id === id);
+      if (entry) {
+        entry.label = entry.label ? '' : label;
+      }
+    },
   },
 });
 
 const { actions, reducer } = historySlice;
 
-export const { addHistoryEntry } = actions;
+export const { addHistoryEntry, addLabelToTransaction } = actions;
 export default reducer;
 
 export const selectHistoryEntries = createSelector(
