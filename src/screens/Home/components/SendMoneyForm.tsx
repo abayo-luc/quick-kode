@@ -17,6 +17,7 @@ import { removeCountryCode } from '../../../common/helpers';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { MOMO_USSD_CODES } from '../../../common/helpers/ussd.momo.helper';
+import { NumberInput } from '../../../common/components/Input/NumberInput';
 
 const validationSchema = Yup.object().shape({
   phoneNumber: Yup.string().required('Required'),
@@ -144,7 +145,7 @@ export const SendMoneyForm: React.FC<SendMoneyFormProps> = ({
           ) : null}
         </View>
         <View>
-          <TextInput
+          <NumberInput
             keyboardType="decimal-pad"
             mode="outlined"
             label="Amount"

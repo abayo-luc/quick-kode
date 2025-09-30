@@ -12,6 +12,7 @@ import { ThemeSpacings } from '../../../config/theme';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { MOMO_USSD_CODES } from '../../../common/helpers/ussd.momo.helper';
+import { NumberInput } from '../../../common/components/Input/NumberInput';
 
 const validationSchema = Yup.object().shape({
   paymentCode: Yup.string().required('Required'),
@@ -89,7 +90,7 @@ export const PayGoodsForm: React.FC<PayGoodsFormProps> = ({
           ) : null}
         </View>
         <View>
-          <TextInput
+          <NumberInput
             keyboardType="decimal-pad"
             mode="outlined"
             label="Amount"
