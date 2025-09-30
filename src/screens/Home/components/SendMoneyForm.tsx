@@ -15,13 +15,17 @@ import { ThemeSpacings } from '../../../config/theme';
 import { selectContactPhone } from 'react-native-select-contact';
 import { removeCountryCode } from '../../../common/helpers';
 import * as Yup from 'yup';
-import { useFormik } from 'formik';
+import { useFormik, validateYupSchema } from 'formik';
 import { MOMO_USSD_CODES } from '../../../common/helpers/ussd.momo.helper';
 import { NumberInput } from '../../../common/components/Input/NumberInput';
+import { reverseFormatCurrency } from '../../../common/helpers/currency.helpers';
 
 const validationSchema = Yup.object().shape({
   phoneNumber: Yup.string().required('Required'),
-  amount: Yup.number().min(1, 'Too small').required('Required'),
+  amount: Yup.number()
+    .transform(reverseFormatCurrency)
+    .min(1, 'Too small')
+    .required('Required'),
 });
 const styles = StyleSheet.create({
   container: {
@@ -53,9 +57,10 @@ export const SendMoneyForm: React.FC<SendMoneyFormProps> = ({
     initialValues: { amount: '', phoneNumber: '' },
     validationSchema,
     onSubmit: values => {
+      const transformedValue = validationSchema.cast(values);
       onConfirm?.({
-        amount: values.amount,
-        receiver: values.phoneNumber,
+        amount: transformedValue.amount.toString(),
+        receiver: transformedValue.phoneNumber,
         ussCodeKey: 'SEND_MONEY',
       });
     },

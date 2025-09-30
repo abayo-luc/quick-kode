@@ -48,9 +48,10 @@ export const PayGoodsForm: React.FC<PayGoodsFormProps> = ({
     initialValues: { amount: '', paymentCode: '' },
     validationSchema,
     onSubmit: values => {
+      const transformedValue = validationSchema.cast(values);
       onConfirm?.({
-        amount: values.amount,
-        receiver: values.paymentCode,
+        amount: transformedValue.amount.toString(),
+        receiver: transformedValue.paymentCode,
         ussCodeKey: 'PAY_GOOD_SERVICE',
       });
     },
